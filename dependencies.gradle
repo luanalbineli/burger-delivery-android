@@ -1,0 +1,45 @@
+ext {
+    versions = [
+            support                 : '26.1.0',
+            constraintLayout        : '1.0.2',
+            fancyButton             : '1.1.3',
+            retrofit                : '2.3.0',
+            okHttpLoggingInterceptor: '3.6.0',
+            gson                    : '2.8.1',
+            timber                  : '4.5.1',
+            dagger                  : '2.10',
+            butterKnife             : '8.8.1',
+            fresco                  : '1.7.1'
+    ]
+
+    supportV13 = "com.android.support:support-v13:$versions.support"
+
+    supportV7 = "com.android.support:appcompat-v7:$versions.support"
+
+    design = "com.android.support:design:$versions.support"
+
+    supportAnnotations = "com.android.support:support-annotations:$versions.support"
+
+    retrofit = [
+            "com.squareup.retrofit2:retrofit:$versions.retrofit",
+            "com.squareup.retrofit2:converter-gson:$versions.retrofit",
+            "com.squareup.retrofit2:retrofit-mock:$versions.retrofit",
+            "com.squareup.okhttp3:logging-interceptor:$versions.okHttpLoggingInterceptor"
+    ]
+
+    gson = "com.google.code.gson:gson:$versions.gson"
+
+    recyclerView = "com.android.support:recyclerview-v7:$versions.support"
+
+    constraintLayout = "com.android.support.constraint:constraint-layout:$versions.constraintLayout"
+
+    fancyButton = "com.ekalips.android:fancyprogressbutton:$versions.fancyButton"
+
+    dagger = "com.google.dagger:dagger:$versions.dagger"
+    daggerCompiler = "com.google.dagger:dagger-compiler:$versions.dagger"
+
+    timber = "com.jakewharton.timber:timber:$versions.timber"
+
+    butterKnife = "com.jakewharton:butterknife:$versions.butterKnife"
+    butterKnifeCompiler = "com.jakewharton:butterknife-compiler:$versions.butterKnife"
+}
