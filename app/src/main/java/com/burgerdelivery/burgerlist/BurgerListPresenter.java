@@ -1,4 +1,4 @@
-package com.burgerdelivery.hamburgerlist;
+package com.burgerdelivery.burgerlist;
 
 import android.support.annotation.Nullable;
 
@@ -15,7 +15,7 @@ public class BurgerListPresenter implements BurgerListContract.Presenter {
     private BurgerListContract.View mView;
 
     @Inject
-    public BurgerListPresenter() { }
+    BurgerListPresenter() { }
 
     @Override
     public void setView(BurgerListContract.View view) {
@@ -30,6 +30,8 @@ public class BurgerListPresenter implements BurgerListContract.Presenter {
         } else {
             mView.showBurgerList(data);
         }
+
+        mView.hideLoadingIndicator();
     }
 
     @Override
@@ -41,5 +43,11 @@ public class BurgerListPresenter implements BurgerListContract.Presenter {
         } else {
             mView.showBurgerList(burgerListViewModel.burgerList);
         }
+    }
+
+    @Override
+    public void tryToFetchBurgerListAgain() {
+        mView.showLoadingIndicator();
+        mView.tryToFetchBurgerListUsingLoaderAgain();
     }
 }

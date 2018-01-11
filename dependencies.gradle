@@ -9,7 +9,7 @@ ext {
             timber                  : '4.5.1',
             dagger                  : '2.10',
             butterKnife             : '8.8.1',
-            fresco                  : '1.7.1'
+            fresco                  : '1.5.0'
     ]
 
     supportV13 = "com.android.support:support-v13:$versions.support"
@@ -39,6 +39,8 @@ ext {
     daggerCompiler = "com.google.dagger:dagger-compiler:$versions.dagger"
 
     timber = "com.jakewharton.timber:timber:$versions.timber"
+
+    fresco = "com.facebook.fresco:fresco:$versions.fresco"
 
     butterKnife = "com.jakewharton:butterknife:$versions.butterKnife"
     butterKnifeCompiler = "com.jakewharton:butterknife-compiler:$versions.butterKnife"

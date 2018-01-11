@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="16dp">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/sdvBurgerItemImage"
+        android:layout_width="@dimen/burger_item_image_size"
+        android:layout_height="@dimen/burger_item_image_size"
+        fresco:actualImageScaleType="centerCrop"
+        fresco:layout_constraintBottom_toBottomOf="parent"
+        fresco:layout_constraintStart_toStartOf="parent"
+        fresco:layout_constraintTop_toTopOf="parent"
+        fresco:placeholderImage="@android:color/darker_gray"
+        fresco:roundedCornerRadius="5dp" />
+
+    <TextView
+        android:id="@+id/tvBurgerItemName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/LightMediumText"
+        android:layout_marginStart="16dp"
+        tools:text="This is the burger name"
+        fresco:layout_constraintEnd_toEndOf="parent"
+        fresco:layout_constraintStart_toEndOf="@+id/sdvBurgerItemImage"
+        fresco:layout_constraintTop_toTopOf="@+id/sdvBurgerItemImage" />
+
+    <TextView
+        android:id="@+id/tvBurgerItemDescription"
+        style="@style/ThinSmallText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        fresco:layout_constraintBottom_toBottomOf="parent"
+        fresco:layout_constraintEnd_toEndOf="parent"
+        fresco:layout_constraintStart_toStartOf="@+id/tvBurgerItemName"
+        fresco:layout_constraintTop_toBottomOf="@+id/tvBurgerItemName"
+        fresco:layout_constraintVertical_bias="0.0"
+        tools:text="This is the burger description. Here I'll put the ingredients and try to captivate the user's atttention to the tasty of it." />
+</android.support.constraint.ConstraintLayout>

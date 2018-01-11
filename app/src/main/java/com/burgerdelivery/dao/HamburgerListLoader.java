@@ -24,7 +24,7 @@ public class HamburgerListLoader extends AsyncTaskLoaderExecutor<List<BurgerMode
         Timber.d("Fetching the burger list from the API using Retrofit");
         try {
             return mRetrofit.create(APIInterface.class).getBurgerList().execute().body();
-        } catch (IOException e) {
+        } catch (Exception e) {
             Timber.e(e, "An error occurred while tried to fetch the burger list");
             return null;
         }

@@ -1,33 +1,8 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
-    <bool name="isTablet">false</bool>
-    <dimen name="home_movie_list_image_width">150dp</dimen>
-    <dimen name="home_movie_list_image_height">200dp</dimen>
-    <dimen name="home_movie_list_text_margin_top">4dp</dimen>
-    <dimen name="home_movie_list_image_space">16dp</dimen>
-
-
-
-    <!-- MovieImageView -->
-    <dimen name="movie_image_view_favorite_button">34dp</dimen>
-    <dimen name="movie_image_view_detail_button">34sp</dimen>
-
-    <!-- Cast -->
-    <dimen name="cast_movie_list_image_width">135dp</dimen>
-    <dimen name="cast_movie_list_image_height">200dp</dimen>
-
-
-    <!-- Generic -->
-    <dimen name="smallest_text_size">12sp</dimen>
-    <dimen name="default_icon_size">24dp</dimen>
-
-    <!-- In Theaters -->
-    <dimen name="in_theaters_backdrop_height">240dp</dimen>
-
-    <!-- Genre list -->
-    <dimen name="genre_horizontal_space">8dp</dimen>
-
     <!-- RequestStatusView -->
     <dimen name="text_error_title_size">56sp</dimen>
     <dimen name="error_robot_height">140dp</dimen>
+
+    <!-- Burger item -->
+    <dimen name="burger_item_image_size">96dp</dimen>
 </resources>

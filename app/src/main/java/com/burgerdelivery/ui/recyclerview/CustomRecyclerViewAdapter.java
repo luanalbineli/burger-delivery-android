@@ -9,20 +9,25 @@ import android.view.ViewGroup;
 
 import com.burgerdelivery.R;
 import com.burgerdelivery.enunn.RequestStatus;
+import com.burgerdelivery.ui.RequestStatusView;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
 
-public class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerViewHolder> extends RecyclerView.Adapter<CustomRecyclerViewHolder> {
+public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerViewHolder> extends RecyclerView.Adapter<CustomRecyclerViewHolder> {
     private final List<TItem> mItems;
     //private var mOnItemClickListener: ((position: Int, item: TItem) -> Unit)? = null
     private @RequestStatus int mRequestStatus = RequestStatus.HIDDEN;
 
     private int mEmptyMessageResId = R.string.the_list_is_empty;
 
-    private @Nullable ITryAgainListener mTryAgainClickListener;
+    private @Nullable
+    RequestStatusView.ITryAgainListener mTryAgainClickListener;
+
+    private @Nullable IItemClickListener<TItem> mOnItemClickListener;
 
     protected CustomRecyclerViewAdapter() {
         this(new ArrayList<TItem>());
@@ -32,9 +37,8 @@ public class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerView
         this.mItems = items;
     }
 
-    protected CustomRecyclerViewAdapter(@StringRes int emptyMessageResId, ITryAgainListener tryAgainClickListener) {
+    public CustomRecyclerViewAdapter(@StringRes int emptyMessageResId, @Nullable RequestStatusView.ITryAgainListener tryAgainClickListener) {
         this();
-
         mEmptyMessageResId = emptyMessageResId;
         mTryAgainClickListener = tryAgainClickListener;
     }
@@ -42,19 +46,138 @@ public class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerView
     @Override
     public CustomRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ViewType.GRID_STATUS) {
-            View itemView = LayoutInflater.from(parent.context).inflate(R.layout.grid_status, parent, false)
-            return GridStatusViewHolder(itemView, mTryAgainClickListener, mEmptyMessageResId)
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_status, parent, false);
+            return new GridStatusViewHolder(itemView, mEmptyMessageResId, mTryAgainClickListener);
         }
-        return onCreateItemViewHolder(parent, viewType)
+        return onCreateItemViewHolder(LayoutInflater.from(parent.getContext()), parent, viewType);
     }
 
-    public interface ITryAgainListener {
-        void tryAgain();
+    @Override
+    public void onBindViewHolder(final CustomRecyclerViewHolder holder, int position) {
+        if (holder.getItemViewType() == ViewType.GRID_STATUS) {
+            GridStatusViewHolder gridStatusViewHolder = (GridStatusViewHolder) holder;
+            gridStatusViewHolder.bind(mRequestStatus, mItems.size());
+            return;
+        }
+
+
+        onBindItemViewHolder((THolder) holder, position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.click(holder.getAdapterPosition(), mItems.get(holder.getAdapterPosition()));
+                }
+            }
+        });
     }
+
+    public int getItemCount() {
+        return mItems.size() + (mRequestStatus == RequestStatus.HIDDEN ? 0 : 1);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == mItems.size()) {
+            return ViewType.GRID_STATUS;
+        }
+
+        int itemViewType = getItemViewTypeOverride(position);
+        if (itemViewType == ViewType.GRID_STATUS) {
+            throw new InvalidParameterException("The view type must be different of ${ViewType.GRID_STATUS}");
+        }
+        return itemViewType;
+    }
+
+    public int getItemViewTypeOverride(int position) {
+        return ViewType.ITEM;
+    }
+
+    protected TItem getItemByPosition(int position) {
+        return mItems.get(position);
+    }
+
+    public void addItems(List<TItem> items) {
+        hideRequestStatus();
+
+        int itemCount = mItems.size();
+        mItems.addAll(items);
+        notifyItemRangeInserted(itemCount, items.size());
+    }
+
+    void replaceItems(List<TItem> items) {
+        redrawGridStatus(RequestStatus.HIDDEN);
+
+        clearItems();
+
+        mItems.addAll(items);
+        notifyItemRangeInserted(0, items.size());
+    }
+
+    void clearItems() {
+        int itemCount = mItems.size();
+        if (itemCount > 0) {
+            mItems.clear();
+            notifyItemRangeRemoved(0, itemCount);
+        }
+    }
+
+    void removeItemByIndex(int index) {
+        mItems.remove(index);
+        notifyItemRemoved(index);
+    }
+
+    void insertItemByIndex(TItem item, int index) {
+        mItems.add(index, item);
+        notifyItemInserted(index);
+    }
+
+    public void showLoading() {
+        redrawGridStatus(RequestStatus.LOADING);
+    }
+
+    void hideRequestStatus() {
+        redrawGridStatus(RequestStatus.HIDDEN);
+    }
+
+    public void hideLoadingIndicator() {
+        if (mRequestStatus == RequestStatus.LOADING) { // Hide only if is loading
+            hideRequestStatus();
+        }
+    }
+
+    public void showEmptyMessage() {
+        redrawGridStatus(RequestStatus.EMPTY);
+    }
+
+    public void showErrorMessage() {
+        redrawGridStatus(RequestStatus.ERROR);
+    }
+
+    private void redrawGridStatus(int gridStatus) {
+        Timber.i("REDRAWING THE GRID STATUS: " + gridStatus);
+        int previousRequestStatus = mRequestStatus;
+        mRequestStatus = gridStatus;
+        if (mRequestStatus == RequestStatus.HIDDEN) {
+            notifyItemRemoved(mItems.size());
+        } else if (previousRequestStatus == RequestStatus.HIDDEN) {
+            notifyItemInserted(mItems.size());
+        } else {
+            notifyItemChanged(mItems.size());
+        }
+    }
+
+    protected abstract THolder onCreateItemViewHolder(LayoutInflater layoutInflater, ViewGroup parent, int viewType);
+
+    protected abstract void onBindItemViewHolder(THolder holder, int position);
 
     @interface ViewType {
         int GRID_STATUS = 0;
         int ITEM = 1;
+    }
+
+    public interface IItemClickListener<TItem> {
+        void click(int position, TItem item);
     }
 
    /* private var mTryAgainClickListener: (() -> Unit)? = null
@@ -85,7 +208,7 @@ public class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerView
         return onCreateItemViewHolder(parent, viewType)
     }
 
-    override fun onBindViewHolder(holder: CustomRecyclerViewHolder, position: Int) {
+    override void onBindViewHolder(holder: CustomRecyclerViewHolder, position: Int) {
         if (holder.itemViewType == ViewType.GRID_STATUS) {
             val gridStatusViewHolder = holder as GridStatusViewHolder
             gridStatusViewHolder.bind(mRequestStatus, mItems.size)
@@ -99,11 +222,11 @@ public class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerView
         }
     }
 
-    override fun getItemCount(): Int {
+    override void getItemCount(): Int {
         return mItems.size + if (mRequestStatus == RequestStatusDescriptor.HIDDEN) 0 else 1 // List status.
     }
 
-    final override fun getItemViewType(position: Int): Int {
+    final override void getItemViewType(position: Int): Int {
         if (position == mItems.size) {
             return ViewType.GRID_STATUS
         }
@@ -114,15 +237,15 @@ public class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerView
         return itemViewType
     }
 
-    open protected fun getItemViewTypeOverride(position: Int): Int {
+    open protected void getItemViewTypeOverride(position: Int): Int {
         return ViewType.ITEM
     }
 
-    protected fun getItemByPosition(position: Int): TItem {
+    protected void getItemByPosition(position: Int): TItem {
         return mItems[position]
     }
 
-    fun addItems(items:List<TItem>) {
+    void addItems(items:List<TItem>) {
         hideRequestStatus()
 
         val itemCount = mItems.size
@@ -130,7 +253,7 @@ public class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerView
         notifyItemRangeInserted(itemCount, items.size)
     }
 
-    fun replaceItems(items: List<TItem>) {
+    void replaceItems(items: List<TItem>) {
         redrawGridStatus(RequestStatusDescriptor.HIDDEN)
 
         clearItems()
@@ -139,7 +262,7 @@ public class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerView
         notifyItemRangeInserted(0, items.size)
     }
 
-    fun clearItems() {
+    void clearItems() {
         val itemCount = mItems.size
         if (itemCount > 0) {
             mItems.clear()
@@ -147,12 +270,12 @@ public class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerView
         }
     }
 
-    fun removeItemByIndex(index: Int) {
+    void removeItemByIndex(index: Int) {
         mItems.removeAt(index)
         notifyItemRemoved(index)
     }
 
-    fun insertItemByIndex(item: TItem, index: Int) {
+    void insertItemByIndex(item: TItem, index: Int) {
         mItems.add(index, item)
         notifyItemInserted(index)
     }
@@ -160,29 +283,29 @@ public class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerView
     val items: List<TItem>
     get() = mItems
 
-    fun showLoading() {
+    void showLoading() {
         redrawGridStatus(RequestStatusDescriptor.LOADING)
     }
 
-    fun hideRequestStatus() {
+    void hideRequestStatus() {
         redrawGridStatus(RequestStatusDescriptor.HIDDEN)
     }
 
-    fun hideLoadingIndicator() {
+    void hideLoadingIndicator() {
         if (mRequestStatus == RequestStatusDescriptor.LOADING) { // Hide only if is loading
             hideRequestStatus()
         }
     }
 
-    fun showEmptyMessage() {
+    void showEmptyMessage() {
         redrawGridStatus(RequestStatusDescriptor.EMPTY)
     }
 
-    fun showErrorMessage() {
+    void showErrorMessage() {
         redrawGridStatus(RequestStatusDescriptor.ERROR)
     }
 
-    private fun redrawGridStatus(gridStatus: Int) {
+    private void redrawGridStatus(gridStatus: Int) {
         Timber.i("REDRAWING THE GRID STATUS: " + gridStatus)
         val previousRequestStatus = mRequestStatus
         mRequestStatus = gridStatus
@@ -195,11 +318,11 @@ public class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerView
         }
     }
 
-    fun setOnItemClickListener(onItemClickListener: (position: Int, item: TItem) -> Unit) {
+    void setOnItemClickListener(onItemClickListener: (position: Int, item: TItem) -> Unit) {
         this.mOnItemClickListener = onItemClickListener
     }
 
-    protected abstract fun onCreateItemViewHolder(parent: ViewGroup, viewType: Int): THolder
+    protected abstract void onCreateItemViewHolder(parent: ViewGroup, viewType: Int): THolder
 
-    protected abstract fun onBindItemViewHolder(holder: THolder, position: Int)*/
+    protected abstract void onBindItemViewHolder(holder: THolder, position: Int)*/
 }

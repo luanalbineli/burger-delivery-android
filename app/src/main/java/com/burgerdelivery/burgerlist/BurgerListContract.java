@@ -1,4 +1,4 @@
-package com.burgerdelivery.hamburgerlist;
+package com.burgerdelivery.burgerlist;
 
 import com.burgerdelivery.base.BasePresenter;
 import com.burgerdelivery.model.BurgerModel;
@@ -12,14 +12,20 @@ interface BurgerListContract {
 
         void showErrorLoadingBurgerList();
 
+        void tryToFetchBurgerListUsingLoaderAgain();
+
         void showBurgerList(List<BurgerModel> data);
 
         void showLoadingIndicator();
+
+        void hideLoadingIndicator();
     }
 
     interface Presenter extends BasePresenter<View> {
         void onBurgerListLoadingFinished(List<BurgerModel> data);
 
         void start(BurgerListViewModel burgerListViewModel);
+
+        void tryToFetchBurgerListAgain();
     }
 }

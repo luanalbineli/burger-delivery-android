@@ -19,6 +19,9 @@ public class BurgerModel {
     @SerializedName("price")
     private float price;
 
+    @SerializedName("imageUrl")
+    private String imageUrl;
+
     public int getId() {
         return id;
     }
@@ -37,5 +40,9 @@ public class BurgerModel {
 
     public float getPrice() {
         return price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }
