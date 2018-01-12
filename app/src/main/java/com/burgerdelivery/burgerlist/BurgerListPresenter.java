@@ -50,4 +50,9 @@ public class BurgerListPresenter implements BurgerListContract.Presenter {
         mView.showLoadingIndicator();
         mView.tryToFetchBurgerListUsingLoaderAgain();
     }
+
+    @Override
+    public void handleBurgerItemClick(BurgerModel burgerModel) {
+        mView.showBurgerDetail(burgerModel);
+    }
 }

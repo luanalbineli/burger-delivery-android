@@ -1,4 +1,4 @@
-package com.burgerdelivery.dao;
+package com.burgerdelivery.repository;
 
 import com.burgerdelivery.model.BurgerModel;
 

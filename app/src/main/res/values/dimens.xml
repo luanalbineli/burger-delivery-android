@@ -4,5 +4,8 @@
     <dimen name="error_robot_height">140dp</dimen>
 
     <!-- Burger item -->
-    <dimen name="burger_item_image_size">96dp</dimen>
+    <dimen name="burger_item_image_size">64dp</dimen>
+
+    <!-- Burger detail -->
+    <integer name="observation_max_length">240</integer>
 </resources>

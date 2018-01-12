@@ -1,52 +1,49 @@
 package com.burgerdelivery.burgerdetail;
 
 import android.app.Fragment;
-import android.app.LoaderManager;
-import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.burgerdelivery.R;
 import com.burgerdelivery.base.BaseFragment;
 import com.burgerdelivery.base.BasePresenter;
 import com.burgerdelivery.dagger.component.ApplicationComponent;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
-import com.burgerdelivery.dao.HamburgerListLoader;
 import com.burgerdelivery.model.BurgerModel;
-import com.burgerdelivery.model.viewmodel.BurgerListViewModel;
-import com.burgerdelivery.ui.RequestStatusView;
-
-import java.util.List;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Retrofit;
-import timber.log.Timber;
+
+import static com.burgerdelivery.util.Defaults.DEFAULT_PRICE_FORMAT;
 
 public class BurgerDetailFragment extends BaseFragment<BurgerDetailContract.View> implements BurgerDetailContract.View {
     @Inject
     BurgerDetailPresenter mPresenter;
 
-    @Inject
-    Retrofit mRetrofit;
+    @BindView(R.id.sdvBurgerDetailImage)
+    SimpleDraweeView mBurgerImage;
 
-    @BindView(R.id.rvList)
-    RecyclerView mListRecyclerView;
+    @BindView(R.id.tvBurgerDetailIngredients)
+    TextView mBurgerIngredientsTextView;
 
-    private BurgerIngredientAdapter mAdapter;
+    @BindView(R.id.tvBurgerDetailName)
+    TextView mBurgerNameTextView;
+
+    @BindView(R.id.tvBurgerDetailPrice)
+    TextView mBurgerPriceTextView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.recycler_view, container, false);
+        View rootView = inflater.inflate(R.layout.burger_detail, container, false);
 
         ButterKnife.bind(this, rootView);
 
@@ -57,78 +54,16 @@ public class BurgerDetailFragment extends BaseFragment<BurgerDetailContract.View
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        configureRecyclerView();
-
-        mPresenter.start(new BurgerListViewModel());
-    }
-
-    private void configureRecyclerView() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        mListRecyclerView.setLayoutManager(linearLayoutManager);
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
-        mListRecyclerView.addItemDecoration(dividerItemDecoration);
-
-        mAdapter = new BurgerIngredientAdapter(R.string.burger_list_is_empty, new RequestStatusView.ITryAgainListener() {
-            @Override
-            public void tryAgain() {
-                mPresenter.tryToFetchBurgerListAgain();
-            }
-        });
-
-        mListRecyclerView.setAdapter(mAdapter);
+        mPresenter.start((BurgerModel) getArguments().getParcelable(BURGER_MODEL_BK));
     }
 
     @Override
-    public void fetchBurgerListUsingLoader() {
-        getLoaderManager().initLoader(TASK_ID, null, getLoaderCallback());
-    }
+    public void showBurgerDetail(BurgerModel burgerModel) {
+        mBurgerImage.setImageURI(burgerModel.getImageUrl());
+        mBurgerNameTextView.setText(burgerModel.getName());
+        mBurgerPriceTextView.setText(String.format(getString(R.string.price_format), DEFAULT_PRICE_FORMAT.format(burgerModel.getPrice())));
 
-    @Override
-    public void tryToFetchBurgerListUsingLoaderAgain() {
-        getLoaderManager().restartLoader(TASK_ID, null, getLoaderCallback());
-    }
-
-    private LoaderManager.LoaderCallbacks<List<BurgerModel>> getLoaderCallback() {
-        return new LoaderManager.LoaderCallbacks<List<BurgerModel>>() {
-
-            @Override
-            public Loader<List<BurgerModel>> onCreateLoader(int id, Bundle args) {
-                Timber.d("onCreateLoader - Creating the loader, id: " + id);
-                return new HamburgerListLoader(getActivity(), mRetrofit);
-            }
-
-            @Override
-            public void onLoadFinished(Loader<List<BurgerModel>> loader, List<BurgerModel> data) {
-                Timber.i("onLoadFinished - Finished the loading: " + data);
-                mPresenter.onBurgerListLoadingFinished(data);
-            }
-
-            @Override
-            public void onLoaderReset(Loader<List<BurgerModel>> loader) {
-                Timber.d("onLoaderReset - Reset the loader");
-            }
-        };
-    }
-
-    @Override
-    public void showBurgerList(List<BurgerModel> burgerList) {
-        mAdapter.addItems(burgerList);
-    }
-
-    @Override
-    public void showErrorLoadingBurgerList() {
-        mAdapter.showErrorMessage();
-    }
-
-    @Override
-    public void showLoadingIndicator() {
-        mAdapter.showLoading();
-    }
-
-    @Override
-    public void hideLoadingIndicator() {
-        mAdapter.hideLoadingIndicator();
+        mBurgerIngredientsTextView.setText(TextUtils.join(", ", burgerModel.getIngredients()));
     }
 
     @Override
@@ -149,9 +84,15 @@ public class BurgerDetailFragment extends BaseFragment<BurgerDetailContract.View
         return this;
     }
 
-    public static Fragment getInstance() {
-        return new BurgerDetailFragment();
+    public static Fragment getInstance(BurgerModel burgerModel) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(BURGER_MODEL_BK, burgerModel);
+
+        Fragment fragment = new BurgerDetailFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
     }
 
-    private static final int TASK_ID = 103;
+    private static final String BURGER_MODEL_BK = "burger_model_bk";
 }

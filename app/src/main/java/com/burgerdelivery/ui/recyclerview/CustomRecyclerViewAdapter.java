@@ -19,7 +19,6 @@ import timber.log.Timber;
 
 public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerViewHolder> extends RecyclerView.Adapter<CustomRecyclerViewHolder> {
     private final List<TItem> mItems;
-    //private var mOnItemClickListener: ((position: Int, item: TItem) -> Unit)? = null
     private @RequestStatus int mRequestStatus = RequestStatus.HIDDEN;
 
     private int mEmptyMessageResId = R.string.the_list_is_empty;
@@ -165,6 +164,10 @@ public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRec
         } else {
             notifyItemChanged(mItems.size());
         }
+    }
+
+    public void setOnItemClickListener(IItemClickListener<TItem> onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
     }
 
     protected abstract THolder onCreateItemViewHolder(LayoutInflater layoutInflater, ViewGroup parent, int viewType);

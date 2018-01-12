@@ -1,10 +1,9 @@
-package com.burgerdelivery.dao;
+package com.burgerdelivery.repository;
 
 import android.content.Context;
 
 import com.burgerdelivery.model.BurgerModel;
 
-import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Retrofit;

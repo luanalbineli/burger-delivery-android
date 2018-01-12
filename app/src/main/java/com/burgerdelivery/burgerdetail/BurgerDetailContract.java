@@ -8,24 +8,10 @@ import java.util.List;
 
 interface BurgerDetailContract {
     interface View {
-        void fetchBurgerListUsingLoader();
-
-        void showErrorLoadingBurgerList();
-
-        void tryToFetchBurgerListUsingLoaderAgain();
-
-        void showBurgerList(List<BurgerModel> data);
-
-        void showLoadingIndicator();
-
-        void hideLoadingIndicator();
+        void showBurgerDetail(BurgerModel burgerModel);
     }
 
     interface Presenter extends BasePresenter<View> {
-        void onBurgerListLoadingFinished(List<BurgerModel> data);
-
-        void start(BurgerListViewModel burgerListViewModel);
-
-        void tryToFetchBurgerListAgain();
+        void start(BurgerModel burgerModel);
     }
 }

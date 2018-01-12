@@ -1,4 +1,4 @@
-package com.burgerdelivery.dao;
+package com.burgerdelivery.repository;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;

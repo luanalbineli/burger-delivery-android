@@ -2,7 +2,7 @@ package com.burgerdelivery.dagger.component;
 
 import com.burgerdelivery.BurgerDeliveryApplication;
 import com.burgerdelivery.dagger.modules.ApplicationModule;
-import com.burgerdelivery.dao.HamburgerListLoader;
+import com.burgerdelivery.repository.HamburgerListLoader;
 
 import javax.inject.Singleton;
 

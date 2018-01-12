@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayoutMovieDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <android.support.design.widget.CollapsingToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/collapse_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/sdvBurgerDetailImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:actualImageScaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:placeholderImage="@android:color/darker_gray"
+                app:viewAspectRatio="1.75" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <!--<ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/tvBurgerDetailName"
+            style="@style/LightMediumText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintBottom_toBottomOf="@+id/tvBurgerDetailPrice"
+            app:layout_constraintEnd_toStartOf="@+id/tvBurgerDetailPrice"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvBurgerDetailPrice"
+            tools:text="This is the burger name" />
+
+        <TextView
+            android:id="@+id/tvBurgerDetailPrice"
+            style="@style/LightMediumText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$14.40" />
+
+        <TextView
+            android:id="@+id/labelIngredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/ingredients"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvBurgerDetailPrice" />
+
+        <TextView
+            android:id="@+id/tvBurgerDetailIngredients"
+            style="@style/LightSmallText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/labelIngredient"
+            tools:text="Beef burger, Bacon, Sauce, Pickles, Lettuce, Tomato, Onion" />
+
+
+        <TextView
+            android:id="@+id/labelAdditional"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/additional"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvBurgerDetailIngredients" />
+
+        <CheckBox
+            android:id="@+id/cbBurgerDetailExtraBurger"
+            style="@style/LightSmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/additional_extra_burger"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/labelAdditional" />
+
+        <CheckBox
+            android:id="@+id/cbBurgerDetailExtraCheddar"
+            style="@style/LightSmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/additional_extra_cheddar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cbBurgerDetailExtraBurger" />
+
+        <CheckBox
+            android:id="@+id/cbBurgerDetailExtraPickles"
+            style="@style/LightSmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/additional_extra_pickles"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cbBurgerDetailExtraCheddar" />
+
+        <EditText
+            android:id="@+id/etBurgerDetailObservation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/observation"
+            android:inputType="textMultiLine"
+            android:lines="3"
+            android:maxLength="@integer/observation_max_length"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cbBurgerDetailExtraPickles" />
+
+        <com.ekalips.fancybuttonproj.FancyButton
+            android:id="@+id/btBurgerDetailAddToOrder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/add_to_order"
+            android:textSize="14sp"
+            app:btnStyle="fill"
+            app:fillColor="@color/colorAccent"
+            app:hideFillAfterCollapse="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etBurgerDetailObservation"
+            app:progressColor="@color/colorAccent" />
+    </android.support.constraint.ConstraintLayout>
+    <!--</ScrollView>-->
+
+</android.support.design.widget.CoordinatorLayout>

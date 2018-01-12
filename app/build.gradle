@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    def libs = [supportV7] + constraintLayout + recyclerView + design + gson + retrofit + timber + supportAnnotations + fresco
+    def libs = [supportV7] + constraintLayout + recyclerView + design + gson + retrofit + timber + supportAnnotations + fresco + fancyButton
     implementation libs
 
     implementation dagger

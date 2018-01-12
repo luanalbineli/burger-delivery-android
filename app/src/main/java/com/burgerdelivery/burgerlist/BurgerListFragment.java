@@ -15,12 +15,14 @@ import android.view.ViewGroup;
 import com.burgerdelivery.R;
 import com.burgerdelivery.base.BaseFragment;
 import com.burgerdelivery.base.BasePresenter;
+import com.burgerdelivery.burgerdetail.BurgerDetailFragment;
 import com.burgerdelivery.dagger.component.ApplicationComponent;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
-import com.burgerdelivery.dao.HamburgerListLoader;
+import com.burgerdelivery.repository.HamburgerListLoader;
 import com.burgerdelivery.model.BurgerModel;
 import com.burgerdelivery.model.viewmodel.BurgerListViewModel;
 import com.burgerdelivery.ui.RequestStatusView;
+import com.burgerdelivery.ui.recyclerview.CustomRecyclerViewAdapter;
 
 import java.util.List;
 
@@ -73,6 +75,13 @@ public class BurgerListFragment extends BaseFragment<BurgerListContract.View> im
             @Override
             public void tryAgain() {
                 mPresenter.tryToFetchBurgerListAgain();
+            }
+        });
+
+        mAdapter.setOnItemClickListener(new CustomRecyclerViewAdapter.IItemClickListener<BurgerModel>() {
+            @Override
+            public void click(int position, BurgerModel burgerModel) {
+                mPresenter.handleBurgerItemClick(burgerModel);
             }
         });
 
@@ -129,6 +138,14 @@ public class BurgerListFragment extends BaseFragment<BurgerListContract.View> im
     @Override
     public void hideLoadingIndicator() {
         mAdapter.hideLoadingIndicator();
+    }
+
+    @Override
+    public void showBurgerDetail(BurgerModel burgerModel) {
+        getFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.flMainContent, BurgerDetailFragment.getInstance(burgerModel))
+                .commit();
     }
 
     @Override

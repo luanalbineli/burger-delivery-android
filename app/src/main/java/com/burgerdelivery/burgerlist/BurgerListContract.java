@@ -19,6 +19,8 @@ interface BurgerListContract {
         void showLoadingIndicator();
 
         void hideLoadingIndicator();
+
+        void showBurgerDetail(BurgerModel burgerModel);
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -27,5 +29,7 @@ interface BurgerListContract {
         void start(BurgerListViewModel burgerListViewModel);
 
         void tryToFetchBurgerListAgain();
+
+        void handleBurgerItemClick(BurgerModel burgerModel);
     }
 }
