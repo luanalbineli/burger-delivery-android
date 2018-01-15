@@ -20,15 +20,15 @@ public class MovieProvider extends ContentProvider {
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        URI_MATCHER.addURI(OrderContract.CONTENT_AUTHORITY, OrderContract.PATH_ORDER, CODE_MOVIES);
-        URI_MATCHER.addURI(OrderContract.CONTENT_AUTHORITY, OrderContract.PATH_ORDER + "/*", CODE_MOVIE_DETAIL);
+        URI_MATCHER.addURI(BurgerDeliveryContract.CONTENT_AUTHORITY, BurgerDeliveryContract.PATH_ORDER, CODE_MOVIES);
+        URI_MATCHER.addURI(BurgerDeliveryContract.CONTENT_AUTHORITY, BurgerDeliveryContract.PATH_ORDER + "/*", CODE_MOVIE_DETAIL);
     }
 
-    private MovieDatabase mMovieDatabase;
+    private OrderDatabase mMovieDatabase;
 
     @Override
     public boolean onCreate() {
-        mMovieDatabase = new MovieDatabase(getContext());
+        mMovieDatabase = new OrderDatabase(getContext());
         return true;
     }
 
@@ -55,11 +55,11 @@ public class MovieProvider extends ContentProvider {
         SQLiteDatabase sqLiteDatabase = mMovieDatabase.getReadableDatabase();
 
         if (code == CODE_MOVIE_DETAIL) {
-            selection = OrderContract.MovieEntry._ID + " = ?";
+            selection = BurgerDeliveryContract.OrderEntry._ID + " = ?";
             selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
         }
 
-        final Cursor cursor = sqLiteDatabase.query(OrderContract.MovieEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, sort);
+        final Cursor cursor = sqLiteDatabase.query(BurgerDeliveryContract.OrderEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, sort);
 
         cursor.setNotificationUri(context.getContentResolver(), uri);
         return cursor;
@@ -85,7 +85,7 @@ public class MovieProvider extends ContentProvider {
 
                 SQLiteDatabase sqLiteDatabase = mMovieDatabase.getWritableDatabase();
 
-                long id = sqLiteDatabase.insert(OrderContract.MovieEntry.TABLE_NAME, null, contentValues);
+                long id = sqLiteDatabase.insert(BurgerDeliveryContract.OrderEntry.TABLE_NAME, null, contentValues);
                 if ( id <= 0 ) {
                     throw new android.database.SQLException("Failed to insert a movie into " + uri);
                 }
@@ -114,7 +114,7 @@ public class MovieProvider extends ContentProvider {
 
                 String movieId = uri.getPathSegments().get(1);
                 // Use selections/selectionArgs to filter for this ID
-                final int count = sqLiteDatabase.delete(OrderContract.MovieEntry.TABLE_NAME, OrderContract.MovieEntry._ID + " = ?", new String[] { movieId });
+                final int count = sqLiteDatabase.delete(BurgerDeliveryContract.OrderEntry.TABLE_NAME, BurgerDeliveryContract.OrderEntry._ID + " = ?", new String[] { movieId });
 
                 /*final int count = MovieDatabaseRoom.getInstance(context).movieDAO()
                         .deleteById((int) ContentUris.parseId(uri));*/

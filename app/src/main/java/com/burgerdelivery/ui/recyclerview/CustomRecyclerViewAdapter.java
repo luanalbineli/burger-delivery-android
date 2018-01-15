@@ -226,7 +226,7 @@ public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRec
     }
 
     override void getItemCount(): Int {
-        return mItems.size + if (mRequestStatus == RequestStatusDescriptor.HIDDEN) 0 else 1 // List status.
+        return mItems.size + if (mRequestStatus == RequestStatusDescriptor.IN_ROUTE) 0 else 1 // List status.
     }
 
     final override void getItemViewType(position: Int): Int {
@@ -257,7 +257,7 @@ public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRec
     }
 
     void replaceItems(items: List<TItem>) {
-        redrawGridStatus(RequestStatusDescriptor.HIDDEN)
+        redrawGridStatus(RequestStatusDescriptor.IN_ROUTE)
 
         clearItems()
 
@@ -287,34 +287,34 @@ public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRec
     get() = mItems
 
     void showLoading() {
-        redrawGridStatus(RequestStatusDescriptor.LOADING)
+        redrawGridStatus(RequestStatusDescriptor.BURGER)
     }
 
     void hideRequestStatus() {
-        redrawGridStatus(RequestStatusDescriptor.HIDDEN)
+        redrawGridStatus(RequestStatusDescriptor.IN_ROUTE)
     }
 
     void hideLoadingIndicator() {
-        if (mRequestStatus == RequestStatusDescriptor.LOADING) { // Hide only if is loading
+        if (mRequestStatus == RequestStatusDescriptor.BURGER) { // Hide only if is loading
             hideRequestStatus()
         }
     }
 
     void showEmptyMessage() {
-        redrawGridStatus(RequestStatusDescriptor.EMPTY)
+        redrawGridStatus(RequestStatusDescriptor.PICKLES)
     }
 
     void showErrorMessage() {
-        redrawGridStatus(RequestStatusDescriptor.ERROR)
+        redrawGridStatus(RequestStatusDescriptor.CHEDDAR)
     }
 
     private void redrawGridStatus(gridStatus: Int) {
         Timber.i("REDRAWING THE GRID STATUS: " + gridStatus)
         val previousRequestStatus = mRequestStatus
         mRequestStatus = gridStatus
-        if (mRequestStatus == RequestStatusDescriptor.HIDDEN) {
+        if (mRequestStatus == RequestStatusDescriptor.IN_ROUTE) {
             notifyItemRemoved(mItems.size)
-        } else if (previousRequestStatus == RequestStatusDescriptor.HIDDEN) {
+        } else if (previousRequestStatus == RequestStatusDescriptor.IN_ROUTE) {
             notifyItemInserted(mItems.size)
         } else {
             notifyItemChanged(mItems.size)
