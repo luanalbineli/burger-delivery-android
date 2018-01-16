@@ -17,7 +17,8 @@ public class OrderDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         final String CREATE_TABLE_ORDER = "CREATE TABLE " + BurgerDeliveryContract.OrderEntry.TABLE_NAME + " (" +
                 BurgerDeliveryContract.OrderEntry._ID + " INTEGER PRIMARY KEY, " +
-                BurgerDeliveryContract.OrderEntry.COLUMN_STATUS + " INTEGER NOT NULL);";
+                BurgerDeliveryContract.OrderEntry.COLUMN_STATUS + " INTEGER NOT NULL, " +
+                BurgerDeliveryContract.OrderEntry.COLUMN_DATE + " INTEGER NOT NULL);";
 
         db.execSQL(CREATE_TABLE_ORDER);
 

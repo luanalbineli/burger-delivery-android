@@ -12,16 +12,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 
-public class MovieProvider extends ContentProvider {
-    private static final int CODE_MOVIES = 101;
+public class BurgerProvider extends ContentProvider {
+    private static final int CODE_ORDER = 101;
 
-    private static final int CODE_MOVIE_DETAIL = 103;
+    private static final int CODE_ORDER_ITEMS = 103;
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        URI_MATCHER.addURI(BurgerDeliveryContract.CONTENT_AUTHORITY, BurgerDeliveryContract.PATH_ORDER, CODE_MOVIES);
-        URI_MATCHER.addURI(BurgerDeliveryContract.CONTENT_AUTHORITY, BurgerDeliveryContract.PATH_ORDER + "/*", CODE_MOVIE_DETAIL);
+        URI_MATCHER.addURI(BurgerDeliveryContract.CONTENT_AUTHORITY, BurgerDeliveryContract.PATH_ORDER, CODE_ORDER);
+        URI_MATCHER.addURI(BurgerDeliveryContract.CONTENT_AUTHORITY, BurgerDeliveryContract.PATH_ORDER + "/*/items", CODE_ORDER_ITEMS);
     }
 
     private OrderDatabase mMovieDatabase;
@@ -40,28 +40,20 @@ public class MovieProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 
-        final Context context = getContext();
-        if (context == null) {
-            return null;
-        }
-
-       /* MovieDAO movieDAO = MovieDatabaseRoom.getInstance(context).movieDAO();
-        final Cursor cursor;
-        if (code == CODE_MOVIES) {
-            cursor = movieDAO.selectAll();
-        } else {
-            cursor = movieDAO.selectById((int) ContentUris.parseId(uri));
-        }*/
         SQLiteDatabase sqLiteDatabase = mMovieDatabase.getReadableDatabase();
 
-        if (code == CODE_MOVIE_DETAIL) {
+        if (code == CODE_ORDER_ITEMS) {
             selection = BurgerDeliveryContract.OrderEntry._ID + " = ?";
             selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
         }
 
         final Cursor cursor = sqLiteDatabase.query(BurgerDeliveryContract.OrderEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, sort);
 
-        cursor.setNotificationUri(context.getContentResolver(), uri);
+        final Context context = getContext();
+        if (context != null) {
+            cursor.setNotificationUri(context.getContentResolver(), uri);
+        }
+
         return cursor;
     }
 
@@ -75,7 +67,7 @@ public class MovieProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
         switch (URI_MATCHER.match(uri)) {
-            case CODE_MOVIES:
+            case CODE_ORDER:
                 final Context context = getContext();
                 if (context == null) {
                     return null;
@@ -92,7 +84,7 @@ public class MovieProvider extends ContentProvider {
 
                 context.getContentResolver().notifyChange(uri, null);
                 return ContentUris.withAppendedId(uri, id);
-            case CODE_MOVIE_DETAIL:
+            case CODE_ORDER_ITEMS:
                 throw new IllegalArgumentException("You can only insert a movie using the /movie path.");
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -102,9 +94,9 @@ public class MovieProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         switch (URI_MATCHER.match(uri)) {
-            case CODE_MOVIES:
+            case CODE_ORDER:
                 throw new IllegalArgumentException("You can only remove a movie using the /movie/:movieId path.");
-            case CODE_MOVIE_DETAIL:
+            case CODE_ORDER_ITEMS:
                 final Context context = getContext();
                 if (context == null) {
                     return 0;

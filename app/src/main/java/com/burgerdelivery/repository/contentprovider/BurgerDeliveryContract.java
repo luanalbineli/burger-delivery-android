@@ -21,6 +21,8 @@ public abstract class BurgerDeliveryContract {
 
         public static final String COLUMN_STATUS = "status";
 
+        public static final String COLUMN_DATE = "date";
+
         public static Uri buildOrderWithId(int id) {
             return CONTENT_URI.buildUpon()
                     .appendPath(String.valueOf(id))
@@ -49,5 +51,7 @@ public abstract class BurgerDeliveryContract {
         public static final String COLUMN_BURGER_IMAGE_URL = "burgerImageUrl";
 
         public static final String COLUMN_ADDITIONAL = "additional";
+
+        public static final String COLUMN_OBSERVATION = "observation";
     }
 }
