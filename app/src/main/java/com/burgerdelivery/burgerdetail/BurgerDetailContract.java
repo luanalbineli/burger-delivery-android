@@ -11,6 +11,9 @@ import java.util.List;
 interface BurgerDetailContract {
     interface View {
         void showBurgerDetail(BurgerModel burgerModel);
+
+        void showLoadingIndicator();
+
     }
 
     interface Presenter extends BasePresenter<View> {
