@@ -1,21 +1,20 @@
 package com.burgerdelivery.burgerdetail;
 
-import com.burgerdelivery.enunn.AdditionalItemStatus;
 import com.burgerdelivery.enunn.OrderStatus;
 import com.burgerdelivery.model.BurgerModel;
 import com.burgerdelivery.model.OrderItemModel;
 import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.repository.BurgerRepository;
+import com.burgerdelivery.util.BitFlag;
 
 import java.util.Date;
-import java.util.EnumSet;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
 import io.reactivex.Single;
-import io.reactivex.functions.Consumer;
+import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
+import timber.log.Timber;
 
 public class BurgerDetailPresenter implements BurgerDetailContract.Presenter {
     private final BurgerRepository mBurgerRepository;
@@ -39,10 +38,34 @@ public class BurgerDetailPresenter implements BurgerDetailContract.Presenter {
     }
 
     @Override
-    public void addBurgerToOrder(EnumSet<AdditionalItemStatus> additionalEnumSet, String observation) {
-        mView.showLoadingIndicator();
+    public void addBurgerToOrder(BitFlag additional, String observation) {
+        Timber.d("addBurgerToOrder - Started the creation of the item");
+        mBurgerRepository.getCurrentPendingOrder().flatMap(orderModel -> {
+            if (orderModel == null) {
+                Timber.d("addBurgerToOrder - Need to create the pending order");
+                return mBurgerRepository.insertOrder(new OrderModel(OrderStatus.PENDING, new Date()));
+            }
+            Timber.d("addBurgerToOrder - Already have a pending order: " + orderModel.getId());
+            return Single.just(orderModel.getId());
+        }).flatMap((Function<Integer, SingleSource<?>>) orderId -> {
+            Timber.d("addBurgerToOrder - Order id: " + orderId);
+            OrderItemModel orderItemModel = new OrderItemModel(orderId, additional.getFlags(), observation, mBurgerModel);
 
-        mBurgerRepository.getCurrentPendingOrder().map(orderModel -> {
+            return mBurgerRepository.insertBurgerItemIntoOrder(orderItemModel);
+        }).doOnSubscribe(disposable -> mView.showLoadingIndicator())
+                .doAfterTerminate(() -> mView.hideLoadingIndicator())
+                .subscribe(itemOrderId -> {
+                    Timber.d("Finished the creation of the order item");
+                    mView.showMessageSuccessfullyCreatedOrderItem();
+                    mView.returnToBurgerList();
+                }, throwable -> {
+                    Timber.e(throwable, "An error occurred while tried to save the order item");
+                    mView.showErrorSavingOrderItem(throwable);
+
+                });
+
+
+        /*.map(orderModel -> {
             if (orderModel == null) {
                 return mBurgerRepository.insertOrder(new OrderModel(OrderStatus.PENDING, new Date()));
             }
@@ -64,6 +87,6 @@ public class BurgerDetailPresenter implements BurgerDetailContract.Presenter {
             public void accept(Throwable throwable) throws Exception {
 
             }
-        });
+        });*/
     }
 }

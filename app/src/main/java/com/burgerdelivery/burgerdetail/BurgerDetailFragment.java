@@ -18,15 +18,15 @@ import com.burgerdelivery.dagger.component.ApplicationComponent;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
 import com.burgerdelivery.enunn.AdditionalItemStatus;
 import com.burgerdelivery.model.BurgerModel;
+import com.burgerdelivery.util.BitFlag;
 import com.ekalips.fancybuttonproj.FancyButton;
 import com.facebook.drawee.view.SimpleDraweeView;
-
-import java.util.EnumSet;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 import static com.burgerdelivery.util.Defaults.DEFAULT_PRICE_FORMAT;
 
@@ -47,7 +47,7 @@ public class BurgerDetailFragment extends BaseFragment<BurgerDetailContract.View
     TextView mBurgerPriceTextView;
 
     @BindView(R.id.fbBurgerDetailAddToOrder)
-    FancyButton mAddToOrder;
+    FancyButton mAddToOrderFancyButton;
 
     @BindView(R.id.cbBurgerDetailExtraBurger)
     CheckBox mAdditionalExtraBurgerCheckBox;
@@ -75,31 +75,26 @@ public class BurgerDetailFragment extends BaseFragment<BurgerDetailContract.View
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mAddToOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addBurgerToOrder();
-            }
-        });
+        mAddToOrderFancyButton.setOnClickListener(v -> addBurgerToOrder());
 
-        mPresenter.start((BurgerModel) getArguments().getParcelable(BURGER_MODEL_BK));
+        mPresenter.start(getArguments().getParcelable(BURGER_MODEL_BK));
     }
 
     private void addBurgerToOrder() {
-        EnumSet<AdditionalItemStatus> additionalEnumSet = EnumSet.noneOf(AdditionalItemStatus.class);
+        BitFlag additional = new BitFlag();
         if (mAdditionalExtraBurgerCheckBox.isChecked()) {
-            additionalEnumSet.add(AdditionalItemStatus.BURGER);
+            additional.set(AdditionalItemStatus.BURGER);
         }
 
         if (mAdditionalExtraCheddarCheckBox.isChecked()) {
-            additionalEnumSet.add(AdditionalItemStatus.CHEDDAR);
+            additional.set(AdditionalItemStatus.CHEDDAR);
         }
 
         if (mAdditionalExtraPicklesCheckBox.isChecked()) {
-            additionalEnumSet.add(AdditionalItemStatus.PICKLES);
+            additional.set(AdditionalItemStatus.PICKLES);
         }
 
-        mPresenter.addBurgerToOrder(additionalEnumSet, mObservationEditText.getText().toString());
+        mPresenter.addBurgerToOrder(additional, mObservationEditText.getText().toString());
     }
 
     @Override
@@ -109,6 +104,31 @@ public class BurgerDetailFragment extends BaseFragment<BurgerDetailContract.View
         mBurgerPriceTextView.setText(String.format(getString(R.string.price_format), DEFAULT_PRICE_FORMAT.format(burgerModel.getPrice())));
 
         mBurgerIngredientsTextView.setText(TextUtils.join(", ", burgerModel.getIngredients()));
+    }
+
+    @Override
+    public void showLoadingIndicator() {
+        mAddToOrderFancyButton.collapse();
+    }
+
+    @Override
+    public void showErrorSavingOrderItem(Throwable throwable) {
+        Timber.e(throwable,"An error ocurred while tried to save the order item");
+    }
+
+    @Override
+    public void showMessageSuccessfullyCreatedOrderItem() {
+
+    }
+
+    @Override
+    public void returnToBurgerList() {
+        getActivity().onBackPressed();
+    }
+
+    @Override
+    public void hideLoadingIndicator() {
+        mAddToOrderFancyButton.expand();
     }
 
     @Override

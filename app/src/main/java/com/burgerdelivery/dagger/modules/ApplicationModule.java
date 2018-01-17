@@ -52,5 +52,6 @@ public class ApplicationModule {
         return new HamburgerListLoader(mApplication, retrofit);
     }
 
-    private static final String BASE_URL = "http://90.0.1.143:8080/api/";
+    //private static final String BASE_URL = "http://90.0.1.143:8080/api/";
+    private static final String BASE_URL = "http://10.0.2.2:8080/api/";
 }
