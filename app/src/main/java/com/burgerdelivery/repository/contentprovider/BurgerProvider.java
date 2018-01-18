@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -21,7 +22,7 @@ public class BurgerProvider extends ContentProvider {
 
     static {
         URI_MATCHER.addURI(BurgerDeliveryContract.CONTENT_AUTHORITY, BurgerDeliveryContract.PATH_ORDER, CODE_ORDER);
-        URI_MATCHER.addURI(BurgerDeliveryContract.CONTENT_AUTHORITY, BurgerDeliveryContract.PATH_ORDER + "/*/items", CODE_ORDER_ITEMS);
+        URI_MATCHER.addURI(BurgerDeliveryContract.CONTENT_AUTHORITY, BurgerDeliveryContract.PATH_ITEM, CODE_ORDER_ITEMS);
     }
 
     private OrderDatabase mMovieDatabase;
@@ -66,29 +67,30 @@ public class BurgerProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
+        long createdId = Long.MIN_VALUE;
         switch (URI_MATCHER.match(uri)) {
             case CODE_ORDER:
-                final Context context = getContext();
-                if (context == null) {
+                SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+                if (sqLiteDatabase == null) {
                     return null;
                 }
-                /*final long id = MovieDatabaseRoom.getInstance(context).movieDAO()
-                        .insert(MovieModel.fromContentValues(contentValues));*/
 
-                SQLiteDatabase sqLiteDatabase = mMovieDatabase.getWritableDatabase();
-
-                long id = sqLiteDatabase.insert(BurgerDeliveryContract.OrderEntry.TABLE_NAME, null, contentValues);
-                if ( id <= 0 ) {
-                    throw new android.database.SQLException("Failed to insert a movie into " + uri);
+                createdId = sqLiteDatabase.insert(BurgerDeliveryContract.OrderEntry.TABLE_NAME, null, contentValues);
+            case CODE_ORDER_ITEMS:
+                SQLiteDatabase sqLiteDatabaseOrderItem = getWritableDatabase();
+                if (sqLiteDatabaseOrderItem == null) {
+                    return null;
                 }
 
-                context.getContentResolver().notifyChange(uri, null);
-                return ContentUris.withAppendedId(uri, id);
-            case CODE_ORDER_ITEMS:
-                throw new IllegalArgumentException("You can only insert a movie using the /movie path.");
-            default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
+                createdId = sqLiteDatabaseOrderItem.insert(BurgerDeliveryContract.OrderItemEntry.TABLE_NAME, null, contentValues);
         }
+
+        if (createdId <= 0) {
+            throw new SQLException("Failed to insert a record into " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return ContentUris.withAppendedId(uri, createdId);
     }
 
     @Override
@@ -108,8 +110,6 @@ public class BurgerProvider extends ContentProvider {
                 // Use selections/selectionArgs to filter for this ID
                 final int count = sqLiteDatabase.delete(BurgerDeliveryContract.OrderEntry.TABLE_NAME, BurgerDeliveryContract.OrderEntry._ID + " = ?", new String[] { movieId });
 
-                /*final int count = MovieDatabaseRoom.getInstance(context).movieDAO()
-                        .deleteById((int) ContentUris.parseId(uri));*/
                 context.getContentResolver().notifyChange(uri, null);
                 return count;
             default:
@@ -120,5 +120,14 @@ public class BurgerProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         throw new RuntimeException("Not implemented");
+    }
+
+    private @Nullable SQLiteDatabase getWritableDatabase() {
+        final Context context = getContext();
+        if (context == null) {
+            return null;
+        }
+
+        return mMovieDatabase.getWritableDatabase();
     }
 }

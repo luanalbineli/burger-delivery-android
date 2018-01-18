@@ -58,27 +58,24 @@ public class BurgerRepository {
                 return;
             }
 
-            if (cursor.getCount() == 0) {
-                singleEmitter.onSuccess(null);
-            } else {
+            if (cursor.moveToNext()) {
                 singleEmitter.onSuccess(OrderModel.fromCursor(cursor));
+            } else {
+                singleEmitter.onSuccess(OrderModel.EMPTY);
             }
         }));
     }
 
     public Single<Integer> insertOrder(final OrderModel orderModel) {
-        return observeOnMainThread(Single.create(new SingleOnSubscribe<Integer>() {
-            @Override
-            public void subscribe(SingleEmitter<Integer> singleEmitter) throws Exception {
-                ContentResolver contentResolver = mBurgerDeliveryApplication.getContentResolver();
-                Uri uri = contentResolver.insert(BurgerDeliveryContract.OrderEntry.CONTENT_URI, orderModel.toContentValues());
-                if (uri == null) {
-                    singleEmitter.onError(new SQLDataException("An internal error occurred"));
-                    return;
-                }
-
-                singleEmitter.onSuccess(Integer.parseInt(uri.getLastPathSegment()));
+        return observeOnMainThread(Single.create((SingleOnSubscribe<Integer>) singleEmitter -> {
+            ContentResolver contentResolver = mBurgerDeliveryApplication.getContentResolver();
+            Uri uri = contentResolver.insert(BurgerDeliveryContract.OrderEntry.CONTENT_URI, orderModel.toContentValues());
+            if (uri == null) {
+                singleEmitter.onError(new SQLDataException("An internal error occurred"));
+                return;
             }
+
+            singleEmitter.onSuccess(Integer.parseInt(uri.getLastPathSegment()));
         }));
     }
 

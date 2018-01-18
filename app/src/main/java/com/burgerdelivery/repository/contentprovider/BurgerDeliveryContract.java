@@ -17,7 +17,7 @@ public abstract class BurgerDeliveryContract {
                 .appendPath(PATH_ORDER)
                 .build();
 
-        static final String TABLE_NAME = "order";
+        static final String TABLE_NAME = "orderr"; // With an extra r, because order is a SQLite special keyword.
 
         public static final String COLUMN_STATUS = "status";
 

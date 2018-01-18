@@ -12,10 +12,12 @@ import java.util.Date;
 import java.util.List;
 
 public class OrderModel {
+    public static final OrderModel EMPTY = new OrderModel(Integer.MIN_VALUE);
+
     private List<OrderItemModel> mItemList;
     private Date mDate;
     private int mStatus;
-    private Integer mId;
+    private int mId;
 
     public OrderModel(@OrderStatus int status, Date date) {
         mStatus = status;
@@ -25,6 +27,10 @@ public class OrderModel {
     private OrderModel(int id, @OrderStatus int status, Date date) {
         this(status, date);
 
+        mId = id;
+    }
+
+    private OrderModel(int id) {
         mId = id;
     }
 
@@ -59,7 +65,26 @@ public class OrderModel {
         return contentValues;
     }
 
-    public Integer getId() {
+    public int getId() {
         return mId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!OrderModel.class.isAssignableFrom(obj.getClass())) {
+            return false;
+        }
+        final OrderModel other = (OrderModel) obj;
+        return this.getId() == other.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 53 * hash + this.mId;
+        return hash;
     }
 }

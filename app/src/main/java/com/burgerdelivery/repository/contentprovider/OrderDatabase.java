@@ -16,14 +16,14 @@ public class OrderDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         final String CREATE_TABLE_ORDER = "CREATE TABLE " + BurgerDeliveryContract.OrderEntry.TABLE_NAME + " (" +
-                BurgerDeliveryContract.OrderEntry._ID + " INTEGER PRIMARY KEY, " +
+                BurgerDeliveryContract.OrderEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 BurgerDeliveryContract.OrderEntry.COLUMN_STATUS + " INTEGER NOT NULL, " +
                 BurgerDeliveryContract.OrderEntry.COLUMN_DATE + " INTEGER NOT NULL);";
 
         db.execSQL(CREATE_TABLE_ORDER);
 
         final String CREATE_TABLE_ORDER_ITEM = "CREATE TABLE " + BurgerDeliveryContract.OrderItemEntry.TABLE_NAME + " (" +
-                BurgerDeliveryContract.OrderItemEntry._ID + " INTEGER PRIMARY KEY, " +
+                BurgerDeliveryContract.OrderItemEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 BurgerDeliveryContract.OrderItemEntry.COLUMN_ORDER_ID + " INTEGER NOT NULL, " +
                 BurgerDeliveryContract.OrderItemEntry.COLUMN_BURGER_ID + " INTEGER NOT NULL, " +
                 BurgerDeliveryContract.OrderItemEntry.COLUMN_ADDITIONAL + " INTEGER NOT NULL, " +
@@ -31,8 +31,8 @@ public class OrderDatabase extends SQLiteOpenHelper {
                 BurgerDeliveryContract.OrderItemEntry.COLUMN_BURGER_NAME + " TEXT NOT NULL, " +
                 BurgerDeliveryContract.OrderItemEntry.COLUMN_BURGER_DESCRIPTION + " TEXT NOT NULL, " +
                 BurgerDeliveryContract.OrderItemEntry.COLUMN_BURGER_IMAGE_URL + " TEXT NOT NULL, " +
-                " FOREIGN KEY (" + BurgerDeliveryContract.OrderItemEntry.COLUMN_BURGER_ID + ") " +
-                    "REFERENCES "
+                " FOREIGN KEY (" + BurgerDeliveryContract.OrderItemEntry.COLUMN_BURGER_ID + ")" +
+                    " REFERENCES "
                 + BurgerDeliveryContract.OrderEntry.TABLE_NAME + "(" + BurgerDeliveryContract.OrderEntry._ID + "));";
 
         db.execSQL(CREATE_TABLE_ORDER_ITEM);

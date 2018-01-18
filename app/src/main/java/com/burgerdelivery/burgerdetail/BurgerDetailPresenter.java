@@ -41,7 +41,7 @@ public class BurgerDetailPresenter implements BurgerDetailContract.Presenter {
     public void addBurgerToOrder(BitFlag additional, String observation) {
         Timber.d("addBurgerToOrder - Started the creation of the item");
         mBurgerRepository.getCurrentPendingOrder().flatMap(orderModel -> {
-            if (orderModel == null) {
+            if (orderModel == OrderModel.EMPTY) {
                 Timber.d("addBurgerToOrder - Need to create the pending order");
                 return mBurgerRepository.insertOrder(new OrderModel(OrderStatus.PENDING, new Date()));
             }
