@@ -15,4 +15,6 @@
     <string name="additional_extra_pickles">Extra pickles (+$1.25)</string>
     <string name="observation">Observations</string>
     <string name="add_to_order">Add to order</string>
+    <string name="error_creating_order_item">An unknown error occurred while tried to create the order item. Please, try again</string>
+    <string name="successfully_created_order_item">Successfully created the order item</string>
 </resources>

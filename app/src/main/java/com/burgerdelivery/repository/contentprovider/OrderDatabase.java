@@ -31,7 +31,8 @@ public class OrderDatabase extends SQLiteOpenHelper {
                 BurgerDeliveryContract.OrderItemEntry.COLUMN_BURGER_NAME + " TEXT NOT NULL, " +
                 BurgerDeliveryContract.OrderItemEntry.COLUMN_BURGER_DESCRIPTION + " TEXT NOT NULL, " +
                 BurgerDeliveryContract.OrderItemEntry.COLUMN_BURGER_IMAGE_URL + " TEXT NOT NULL, " +
-                " FOREIGN KEY (" + BurgerDeliveryContract.OrderItemEntry.COLUMN_BURGER_ID + ")" +
+                BurgerDeliveryContract.OrderItemEntry.COLUMN_OBSERVATION + " TEXT, " +
+                " FOREIGN KEY (" + BurgerDeliveryContract.OrderItemEntry.COLUMN_ORDER_ID + ")" +
                     " REFERENCES "
                 + BurgerDeliveryContract.OrderEntry.TABLE_NAME + "(" + BurgerDeliveryContract.OrderEntry._ID + "));";
 

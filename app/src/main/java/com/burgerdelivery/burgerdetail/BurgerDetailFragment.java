@@ -3,6 +3,7 @@ package com.burgerdelivery.burgerdetail;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.burgerdelivery.R;
 import com.burgerdelivery.base.BaseFragment;
@@ -113,12 +115,13 @@ public class BurgerDetailFragment extends BaseFragment<BurgerDetailContract.View
 
     @Override
     public void showErrorSavingOrderItem(Throwable throwable) {
-        Timber.e(throwable,"An error ocurred while tried to save the order item");
+        Timber.e(throwable,"An error occurred while tried to save the order item.");
+        Snackbar.make(mBurgerImage, R.string.error_creating_order_item, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void showMessageSuccessfullyCreatedOrderItem() {
-
+        Toast.makeText(getActivity(), R.string.successfully_created_order_item, Toast.LENGTH_LONG).show();
     }
 
     @Override

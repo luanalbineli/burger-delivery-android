@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.security.InvalidParameterException;
+
 
 public class BurgerProvider extends ContentProvider {
     private static final int CODE_ORDER = 101;
@@ -67,7 +69,7 @@ public class BurgerProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        long createdId = Long.MIN_VALUE;
+        long createdId;
         switch (URI_MATCHER.match(uri)) {
             case CODE_ORDER:
                 SQLiteDatabase sqLiteDatabase = getWritableDatabase();
@@ -75,14 +77,18 @@ public class BurgerProvider extends ContentProvider {
                     return null;
                 }
 
-                createdId = sqLiteDatabase.insert(BurgerDeliveryContract.OrderEntry.TABLE_NAME, null, contentValues);
+                createdId = sqLiteDatabase.insertOrThrow(BurgerDeliveryContract.OrderEntry.TABLE_NAME, null, contentValues);
+                break;
             case CODE_ORDER_ITEMS:
                 SQLiteDatabase sqLiteDatabaseOrderItem = getWritableDatabase();
                 if (sqLiteDatabaseOrderItem == null) {
                     return null;
                 }
 
-                createdId = sqLiteDatabaseOrderItem.insert(BurgerDeliveryContract.OrderItemEntry.TABLE_NAME, null, contentValues);
+                createdId = sqLiteDatabaseOrderItem.insertOrThrow(BurgerDeliveryContract.OrderItemEntry.TABLE_NAME, null, contentValues);
+                break;
+            default:
+                throw new InvalidParameterException("Unknown uri: " + uri);
         }
 
         if (createdId <= 0) {
