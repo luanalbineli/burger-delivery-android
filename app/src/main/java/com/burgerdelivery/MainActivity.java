@@ -1,16 +1,17 @@
 package com.burgerdelivery;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.burgerdelivery.burgerlist.BurgerListFragment;
+import com.burgerdelivery.orderitemlist.OrderItemListActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
@@ -41,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_cart) {
-            Timber.d("Open the cart");
+            Intent intent = OrderItemListActivity.getIntent(this);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

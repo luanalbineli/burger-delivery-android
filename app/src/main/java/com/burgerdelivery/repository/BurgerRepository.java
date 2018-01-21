@@ -1,7 +1,6 @@
 package com.burgerdelivery.repository;
 
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -12,15 +11,13 @@ import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.repository.contentprovider.BurgerDeliveryContract;
 
 import java.sql.SQLDataException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
-import io.reactivex.CompletableOnSubscribe;
-import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
@@ -63,6 +60,26 @@ public class BurgerRepository {
             } else {
                 singleEmitter.onSuccess(OrderModel.EMPTY);
             }
+        }));
+    }
+
+    public Single<List<OrderItemModel>> getItemsByOrderId(final int orderId) {
+        return observeOnMainThread(Single.create((SingleOnSubscribe<List<OrderItemModel>>) singleEmitter -> {
+            ContentResolver contentResolver = mBurgerDeliveryApplication.getContentResolver();
+            String selection = BurgerDeliveryContract.OrderItemEntry.COLUMN_ORDER_ID + " = ?";
+            String[] selectionArgs = new String[]{String.valueOf(orderId)};
+            Cursor cursor = contentResolver.query(BurgerDeliveryContract.OrderItemEntry.CONTENT_URI, null, selection, selectionArgs, null);
+            if (cursor == null) {
+                singleEmitter.onError(new SQLDataException("An internal error occurred"));
+                return;
+            }
+
+            List<OrderItemModel> orderItemList = new ArrayList<>(cursor.getCount());
+            while (cursor.moveToNext()) {
+                orderItemList.add(OrderItemModel.fromCursor(orderId, cursor));
+            }
+
+            singleEmitter.onSuccess(orderItemList);
         }));
     }
 

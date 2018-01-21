@@ -50,8 +50,12 @@ public abstract class BurgerDeliveryContract {
 
         public static final String COLUMN_BURGER_IMAGE_URL = "burgerImageUrl";
 
+        public static final String COLUMN_BURGER_INGREDIENTS = "burgerIngredients";
+
         public static final String COLUMN_ADDITIONAL = "additional";
 
         public static final String COLUMN_OBSERVATION = "observation";
+
+        public static final String COLUMN_QUANTITY = "quantity";
     }
 }

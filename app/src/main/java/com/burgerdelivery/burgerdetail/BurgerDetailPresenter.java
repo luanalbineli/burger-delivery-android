@@ -47,9 +47,9 @@ public class BurgerDetailPresenter implements BurgerDetailContract.Presenter {
             }
             Timber.d("addBurgerToOrder - Already have a pending order: " + orderModel.getId());
             return Single.just(orderModel.getId());
-        }).flatMap((Function<Integer, SingleSource<?>>) orderId -> {
+        }).flatMap(orderId -> {
             Timber.d("addBurgerToOrder - Order id: " + orderId);
-            OrderItemModel orderItemModel = new OrderItemModel(orderId, additional.getFlags(), observation, mBurgerModel);
+            OrderItemModel orderItemModel = new OrderItemModel(orderId, additional.getFlags(), observation, 0, mBurgerModel);
 
             return mBurgerRepository.insertBurgerItemIntoOrder(orderItemModel);
         }).doOnSubscribe(disposable -> mView.showLoadingIndicator())
@@ -63,30 +63,5 @@ public class BurgerDetailPresenter implements BurgerDetailContract.Presenter {
                     mView.showErrorSavingOrderItem(throwable);
 
                 });
-
-
-        /*.map(orderModel -> {
-            if (orderModel == null) {
-                return mBurgerRepository.insertOrder(new OrderModel(OrderStatus.PENDING, new Date()));
-            }
-            return Single.just(orderModel.getId());
-        }).map(integerSingle -> integerSingle.blockingGet()).map(new Function<Integer, Completable>() {
-            @Override
-            public Completable apply(Integer orderId) throws Exception {
-                OrderItemModel orderItemModel = new OrderItemModel(orderId, additionalEnumSet, mBurgerModel);
-
-                return mBurgerRepository.insertBurgerItemIntoOrder(orderItemModel);
-            }
-        }).subscribe(new Consumer<Completable>() {
-            @Override
-            public void accept(Completable completable) throws Exception {
-
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-
-            }
-        });*/
     }
 }

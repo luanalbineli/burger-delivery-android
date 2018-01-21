@@ -25,6 +25,15 @@ public class BurgerModel implements Parcelable {
     @SerializedName("imageUrl")
     private String imageUrl;
 
+    public BurgerModel(int id, String name, String description, String[] ingredients, float price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.ingredients = ingredients;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
     protected BurgerModel(Parcel in) {
         id = in.readInt();
         name = in.readString();

@@ -3,6 +3,7 @@ package com.burgerdelivery.dagger.component;
 import com.burgerdelivery.burgerdetail.BurgerDetailFragment;
 import com.burgerdelivery.dagger.PerFragment;
 import com.burgerdelivery.burgerlist.BurgerListFragment;
+import com.burgerdelivery.orderitemlist.OrderItemListActivity;
 
 import dagger.Component;
 
@@ -12,4 +13,6 @@ public interface InjectorComponent {
     void inject(BurgerListFragment hamburgerListFragment);
 
     void inject(BurgerDetailFragment burgerDetailFragment);
+
+    void inject(OrderItemListActivity activity);
 }

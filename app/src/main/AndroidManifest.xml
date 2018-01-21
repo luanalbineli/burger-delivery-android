@@ -22,6 +22,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".orderitemlist.OrderItemListActivity" />
+
         <provider
             android:name=".repository.contentprovider.BurgerProvider"
             android:authorities="com.burgerdelivery.provider"
