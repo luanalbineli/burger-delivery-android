@@ -17,4 +17,6 @@
     <string name="add_to_order">Add to order</string>
     <string name="error_creating_order_item">An unknown error occurred while tried to create the order item. Please, try again</string>
     <string name="successfully_created_order_item">Successfully created the order item</string>
+    <string name="remove">Remove</string>
+    <string name="contentDescriptionDeleteOrderItem">Image button used to remove an item from the order</string>
 </resources>
