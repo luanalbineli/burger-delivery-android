@@ -2,7 +2,7 @@ package com.burgerdelivery.dagger.component;
 
 import com.burgerdelivery.BurgerDeliveryApplication;
 import com.burgerdelivery.dagger.modules.ApplicationModule;
-import com.burgerdelivery.repository.HamburgerListLoader;
+import com.burgerdelivery.repository.loader.BurgerListLoader;
 
 import javax.inject.Singleton;
 
@@ -16,5 +16,5 @@ public interface ApplicationComponent {
 
     BurgerDeliveryApplication providesApplication();
 
-    HamburgerListLoader providesHamburgerListLoader();
+    BurgerListLoader providesHamburgerListLoader();
 }

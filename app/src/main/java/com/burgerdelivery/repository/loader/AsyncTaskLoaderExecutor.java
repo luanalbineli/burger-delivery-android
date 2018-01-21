@@ -1,4 +1,4 @@
-package com.burgerdelivery.repository;
+package com.burgerdelivery.repository.loader;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;

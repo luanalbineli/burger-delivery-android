@@ -2,7 +2,7 @@ package com.burgerdelivery.dagger.modules;
 
 import com.burgerdelivery.BuildConfig;
 import com.burgerdelivery.BurgerDeliveryApplication;
-import com.burgerdelivery.repository.HamburgerListLoader;
+import com.burgerdelivery.repository.loader.BurgerListLoader;
 import com.google.gson.Gson;
 
 import javax.inject.Singleton;
@@ -48,8 +48,8 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    HamburgerListLoader providesHamburgerListLoader(Retrofit retrofit) {
-        return new HamburgerListLoader(mApplication, retrofit);
+    BurgerListLoader providesHamburgerListLoader(Retrofit retrofit) {
+        return new BurgerListLoader(mApplication, retrofit);
     }
 
     //private static final String BASE_URL = "http://90.0.1.143:8080/api/";

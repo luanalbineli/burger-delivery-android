@@ -7,10 +7,11 @@ import android.view.ViewGroup;
 
 import com.burgerdelivery.R;
 import com.burgerdelivery.model.BurgerModel;
+import com.burgerdelivery.model.OrderItemModel;
 import com.burgerdelivery.ui.RequestStatusView;
 import com.burgerdelivery.ui.recyclerview.CustomRecyclerViewAdapter;
 
-public class OrderItemListAdapter extends CustomRecyclerViewAdapter<BurgerModel, OrderItemListVH> {
+public class OrderItemListAdapter extends CustomRecyclerViewAdapter<OrderItemModel, OrderItemListVH> {
     OrderItemListAdapter(@StringRes int emptyMessageResId, @Nullable RequestStatusView.ITryAgainListener tryAgainClickListener) {
         super(emptyMessageResId, tryAgainClickListener);
     }
@@ -22,7 +23,7 @@ public class OrderItemListAdapter extends CustomRecyclerViewAdapter<BurgerModel,
 
     @Override
     protected void onBindItemViewHolder(OrderItemListVH holder, int position) {
-        BurgerModel burgerModel = getItemByPosition(position);
-        holder.bind(burgerModel);
+        OrderItemModel orderItemModel = getItemByPosition(position);
+        holder.bind(orderItemModel);
     }
 }

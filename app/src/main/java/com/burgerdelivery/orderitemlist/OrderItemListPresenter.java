@@ -3,7 +3,8 @@ package com.burgerdelivery.orderitemlist;
 import android.support.annotation.Nullable;
 
 import com.burgerdelivery.model.BurgerModel;
-import com.burgerdelivery.model.viewmodel.BurgerListViewModel;
+import com.burgerdelivery.model.OrderItemModel;
+import com.burgerdelivery.model.viewmodel.OrderItemListViewModel;
 
 import java.util.List;
 
@@ -23,25 +24,25 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
     }
 
     @Override
-    public void onBurgerListLoadingFinished(@Nullable List<BurgerModel> data) {
+    public void onOrderItemListLoadingFinished(@Nullable List<OrderItemModel> data) {
         Timber.d("LOADED THE BURGER LIST: " + data);
         if (data == null) {
             mView.showErrorLoadingBurgerList();
         } else {
-            mView.showBurgerList(data);
+            mView.showOrderItemList(data);
         }
 
         mView.hideLoadingIndicator();
     }
 
     @Override
-    public void start(BurgerListViewModel burgerListViewModel) {
+    public void start(OrderItemListViewModel orderItemListViewModel) {
         Timber.d("Starting the fragment's presenter");
-        if (burgerListViewModel.burgerList == null) {
+        if (orderItemListViewModel.orderItemList == null) {
             mView.showLoadingIndicator();
-            mView.fetchBurgerListUsingLoader();
+            mView.fetchOrderItemListUsingLoader();
         } else {
-            mView.showBurgerList(burgerListViewModel.burgerList);
+            mView.showOrderItemList(orderItemListViewModel.orderItemList);
         }
     }
 
@@ -52,7 +53,7 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
     }
 
     @Override
-    public void handleBurgerItemClick(BurgerModel burgerModel) {
-        mView.showBurgerDetail(burgerModel);
+    public void handleBurgerItemClick(OrderItemModel orderItemModel) {
+        mView.showBurgerDetail(orderItemModel);
     }
 }

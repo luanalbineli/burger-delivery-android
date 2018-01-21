@@ -1,18 +1,20 @@
-package com.burgerdelivery.repository;
+package com.burgerdelivery.repository.loader;
 
 import android.content.Context;
 
 import com.burgerdelivery.model.BurgerModel;
+import com.burgerdelivery.repository.APIInterface;
+import com.burgerdelivery.repository.loader.AsyncTaskLoaderExecutor;
 
 import java.util.List;
 
 import retrofit2.Retrofit;
 import timber.log.Timber;
 
-public class HamburgerListLoader extends AsyncTaskLoaderExecutor<List<BurgerModel>> {
+public class BurgerListLoader extends AsyncTaskLoaderExecutor<List<BurgerModel>> {
     private final Retrofit mRetrofit;
 
-    public HamburgerListLoader(Context context, Retrofit retrofit) {
+    public BurgerListLoader(Context context, Retrofit retrofit) {
         super(context);
 
         this.mRetrofit = retrofit;

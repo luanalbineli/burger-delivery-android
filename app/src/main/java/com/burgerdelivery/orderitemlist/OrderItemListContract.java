@@ -2,34 +2,35 @@ package com.burgerdelivery.orderitemlist;
 
 import com.burgerdelivery.base.BasePresenter;
 import com.burgerdelivery.model.BurgerModel;
+import com.burgerdelivery.model.OrderItemModel;
 import com.burgerdelivery.model.viewmodel.BurgerListViewModel;
+import com.burgerdelivery.model.viewmodel.OrderItemListViewModel;
 
 import java.util.List;
 
 interface OrderItemListContract {
     interface View {
-        void fetchBurgerListUsingLoader();
+        void fetchOrderItemListUsingLoader();
 
         void showErrorLoadingBurgerList();
 
         void tryToFetchBurgerListUsingLoaderAgain();
 
-        void showBurgerList(List<BurgerModel> data);
+        void showOrderItemList(List<OrderItemModel> data);
 
         void showLoadingIndicator();
 
         void hideLoadingIndicator();
-
-        void showBurgerDetail(BurgerModel burgerModel);
+        void showBurgerDetail(OrderItemModel orderItemModel);
     }
 
     interface Presenter extends BasePresenter<View> {
-        void onBurgerListLoadingFinished(List<BurgerModel> data);
+        void onOrderItemListLoadingFinished(List<OrderItemModel> data);
 
-        void start(BurgerListViewModel burgerListViewModel);
+        void start(OrderItemListViewModel orderItemListViewModel);
 
         void tryToFetchBurgerListAgain();
 
-        void handleBurgerItemClick(BurgerModel burgerModel);
+        void handleBurgerItemClick(OrderItemModel orderItemModel);
     }
 }

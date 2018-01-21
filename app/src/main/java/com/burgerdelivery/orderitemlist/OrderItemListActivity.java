@@ -17,10 +17,10 @@ import com.burgerdelivery.burgerdetail.BurgerDetailFragment;
 import com.burgerdelivery.dagger.component.ApplicationComponent;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
 import com.burgerdelivery.model.BurgerModel;
-import com.burgerdelivery.model.viewmodel.BurgerListViewModel;
-import com.burgerdelivery.repository.HamburgerListLoader;
-import com.burgerdelivery.ui.RequestStatusView;
-import com.burgerdelivery.ui.recyclerview.CustomRecyclerViewAdapter;
+import com.burgerdelivery.model.OrderItemModel;
+import com.burgerdelivery.model.viewmodel.OrderItemListViewModel;
+import com.burgerdelivery.repository.BurgerRepository;
+import com.burgerdelivery.repository.loader.OrderItemListLoader;
 
 import java.util.List;
 
@@ -28,7 +28,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Retrofit;
 import timber.log.Timber;
 
 public class OrderItemListActivity extends BaseActivity<OrderItemListContract.View> implements OrderItemListContract.View {
@@ -36,7 +35,7 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
     OrderItemListPresenter mPresenter;
 
     @Inject
-    Retrofit mRetrofit;
+    BurgerRepository mBurgerRepository;
 
     @BindView(R.id.rvList)
     RecyclerView mListRecyclerView;
@@ -52,7 +51,7 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
 
         configureRecyclerView();
 
-        mPresenter.start(new BurgerListViewModel());
+        mPresenter.start(new OrderItemListViewModel());
     }
 
     private void configureRecyclerView() {
@@ -62,25 +61,15 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, linearLayoutManager.getOrientation());
         mListRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        mAdapter = new OrderItemListAdapter(R.string.burger_list_is_empty, new RequestStatusView.ITryAgainListener() {
-            @Override
-            public void tryAgain() {
-                mPresenter.tryToFetchBurgerListAgain();
-            }
-        });
+        mAdapter = new OrderItemListAdapter(R.string.item_order_list_is_empty, () -> mPresenter.tryToFetchBurgerListAgain());
 
-        mAdapter.setOnItemClickListener(new CustomRecyclerViewAdapter.IItemClickListener<BurgerModel>() {
-            @Override
-            public void click(int position, BurgerModel burgerModel) {
-                mPresenter.handleBurgerItemClick(burgerModel);
-            }
-        });
+        mAdapter.setOnItemClickListener((position, burgerModel) -> mPresenter.handleBurgerItemClick(burgerModel));
 
         mListRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
-    public void fetchBurgerListUsingLoader() {
+    public void fetchOrderItemListUsingLoader() {
         getLoaderManager().initLoader(TASK_ID, null, getLoaderCallback());
     }
 
@@ -89,31 +78,31 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
         getLoaderManager().restartLoader(TASK_ID, null, getLoaderCallback());
     }
 
-    private LoaderManager.LoaderCallbacks<List<BurgerModel>> getLoaderCallback() {
-        return new LoaderManager.LoaderCallbacks<List<BurgerModel>>() {
+    private LoaderManager.LoaderCallbacks<List<OrderItemModel>> getLoaderCallback() {
+        return new LoaderManager.LoaderCallbacks<List<OrderItemModel>>() {
 
             @Override
-            public Loader<List<BurgerModel>> onCreateLoader(int id, Bundle args) {
+            public Loader<List<OrderItemModel>> onCreateLoader(int id, Bundle args) {
                 Timber.d("onCreateLoader - Creating the loader, id: " + id);
-                return new HamburgerListLoader(OrderItemListActivity.this, mRetrofit);
+                return new OrderItemListLoader(OrderItemListActivity.this, mBurgerRepository);
             }
 
             @Override
-            public void onLoadFinished(Loader<List<BurgerModel>> loader, List<BurgerModel> data) {
+            public void onLoadFinished(Loader<List<OrderItemModel>> loader, List<OrderItemModel> data) {
                 Timber.i("onLoadFinished - Finished the loading: " + data);
-                mPresenter.onBurgerListLoadingFinished(data);
+                mPresenter.onOrderItemListLoadingFinished(data);
             }
 
             @Override
-            public void onLoaderReset(Loader<List<BurgerModel>> loader) {
+            public void onLoaderReset(Loader<List<OrderItemModel>> loader) {
                 Timber.d("onLoaderReset - Reset the loader");
             }
         };
     }
 
     @Override
-    public void showBurgerList(List<BurgerModel> burgerList) {
-        mAdapter.addItems(burgerList);
+    public void showOrderItemList(List<OrderItemModel> orderItemList) {
+        mAdapter.addItems(orderItemList);
     }
 
     @Override
@@ -129,14 +118,6 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
     @Override
     public void hideLoadingIndicator() {
         mAdapter.hideLoadingIndicator();
-    }
-
-    @Override
-    public void showBurgerDetail(BurgerModel burgerModel) {
-        getFragmentManager().beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.flMainContent, BurgerDetailFragment.getInstance(burgerModel))
-                .commit();
     }
 
     @Override
@@ -158,8 +139,7 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
     }
 
     public static Intent getIntent(Context context) {
-        Intent intent = new Intent(context, OrderItemListActivity.class);
-        return intent;
+        return new Intent(context, OrderItemListActivity.class);
     }
 
     private static final int TASK_ID = 108;

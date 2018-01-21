@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.burgerdelivery.R;
 import com.burgerdelivery.model.BurgerModel;
+import com.burgerdelivery.model.OrderItemModel;
 import com.burgerdelivery.ui.recyclerview.CustomRecyclerViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -32,11 +33,11 @@ class OrderItemListVH extends CustomRecyclerViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    void bind(BurgerModel burgerModel) {
-        burgerNameTextView.setText(burgerModel.getName());
-        burgerDescriptionTextView.setText(burgerModel.getDescription());
-        burgerPriceTextView.setText(String.format(getContext().getString(R.string.price_format), DEFAULT_PRICE_FORMAT.format(burgerModel.getPrice())));
+    void bind(OrderItemModel orderItemModel) {
+        /*burgerNameTextView.setText(orderItemModel.getName());
+        burgerDescriptionTextView.setText(orderItemModel.getDescription());
+        burgerPriceTextView.setText(String.format(getContext().getString(R.string.price_format), DEFAULT_PRICE_FORMAT.format(orderItemModel.getPrice())));
 
-        burgerImageSimpleDraweeView.setImageURI(burgerModel.getImageUrl());
+        burgerImageSimpleDraweeView.setImageURI(orderItemModel.getImageUrl());*/
     }
 }

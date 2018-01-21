@@ -5,7 +5,7 @@
     <string name="oops">Oops</string>
     <string name="error_something_went_wrong">Uhh… Unfortunately something went wrong. Please, try again</string>
     <string name="contentDescriptionErrorBrokenRobot">This is a image of a broken robot, used to show that a unexpected error occurred</string>
-    <string name="burger_list_is_empty">The burger list is empty</string>
+    <string name="item_order_list_is_empty">The burger list is empty</string>
     <string name="cart">Cart</string>
     <string name="price_format">$ %1$s</string>
     <string name="ingredients">Ingredients</string>

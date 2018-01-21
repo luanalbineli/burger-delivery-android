@@ -18,7 +18,7 @@ import com.burgerdelivery.base.BasePresenter;
 import com.burgerdelivery.burgerdetail.BurgerDetailFragment;
 import com.burgerdelivery.dagger.component.ApplicationComponent;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
-import com.burgerdelivery.repository.HamburgerListLoader;
+import com.burgerdelivery.repository.loader.BurgerListLoader;
 import com.burgerdelivery.model.BurgerModel;
 import com.burgerdelivery.model.viewmodel.BurgerListViewModel;
 import com.burgerdelivery.ui.RequestStatusView;
@@ -71,7 +71,7 @@ public class BurgerListFragment extends BaseFragment<BurgerListContract.View> im
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
         mListRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        mAdapter = new BurgerListAdapter(R.string.burger_list_is_empty, new RequestStatusView.ITryAgainListener() {
+        mAdapter = new BurgerListAdapter(R.string.item_order_list_is_empty, new RequestStatusView.ITryAgainListener() {
             @Override
             public void tryAgain() {
                 mPresenter.tryToFetchBurgerListAgain();
@@ -104,7 +104,7 @@ public class BurgerListFragment extends BaseFragment<BurgerListContract.View> im
             @Override
             public Loader<List<BurgerModel>> onCreateLoader(int id, Bundle args) {
                 Timber.d("onCreateLoader - Creating the loader, id: " + id);
-                return new HamburgerListLoader(getActivity(), mRetrofit);
+                return new BurgerListLoader(getActivity(), mRetrofit);
             }
 
             @Override
