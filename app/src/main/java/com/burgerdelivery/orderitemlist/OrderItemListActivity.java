@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 
 import com.burgerdelivery.R;
 import com.burgerdelivery.base.BaseActivity;
@@ -51,6 +53,10 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
 
         configureRecyclerView();
 
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         mPresenter.start(new OrderItemListViewModel());
     }
 
@@ -66,6 +72,17 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
         mAdapter.setOnItemClickListener((position, burgerModel) -> mPresenter.handleBurgerItemClick(burgerModel));
 
         mListRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -118,6 +135,11 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
     @Override
     public void hideLoadingIndicator() {
         mAdapter.hideLoadingIndicator();
+    }
+
+    @Override
+    public void showBurgerDetail(OrderItemModel orderItemModel) {
+
     }
 
     @Override

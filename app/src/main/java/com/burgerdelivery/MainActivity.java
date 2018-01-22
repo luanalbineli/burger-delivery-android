@@ -1,5 +1,6 @@
 package com.burgerdelivery;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,7 @@ import com.burgerdelivery.orderitemlist.OrderItemListActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.flMainContent, BurgerListFragment.getInstance())
                     .commit();
         }
+
+        getFragmentManager().addOnBackStackChangedListener(this);
     }
 
     @Override
@@ -47,5 +50,23 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        getFragmentManager().popBackStack();
+        return true;
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        checkShouldDisplayBackButton();
+    }
+
+    private void checkShouldDisplayBackButton() {
+        boolean shouldDisplayBackButton = getFragmentManager().getBackStackEntryCount() > 0;
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(shouldDisplayBackButton);
+        }
     }
 }

@@ -21,6 +21,7 @@ interface OrderItemListContract {
         void showLoadingIndicator();
 
         void hideLoadingIndicator();
+
         void showBurgerDetail(OrderItemModel orderItemModel);
     }
 
