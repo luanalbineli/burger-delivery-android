@@ -10,6 +10,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.burgerdelivery.R;
@@ -53,8 +54,9 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
 
         configureRecyclerView();
 
-        if (getActionBar() != null) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.order_detail);
         }
 
         mPresenter.start(new OrderItemListViewModel());

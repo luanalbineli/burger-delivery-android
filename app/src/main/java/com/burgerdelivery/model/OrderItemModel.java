@@ -52,4 +52,12 @@ public class OrderItemModel {
                         SQLUtil.getString(cursor, BurgerDeliveryContract.OrderItemEntry.COLUMN_BURGER_IMAGE_URL)
                 ));
     }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public BurgerModel getBurgerModel() {
+        return burgerModel;
+    }
 }

@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground"
-    android:orientation="vertical"
-    android:id="@+id/llWidgetRecipeContainer">
+    android:orientation="vertical">
+    <ListView
+        android:id="@+id/lvWidgetItemList"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp" />
 
     <TextView
-        android:id="@+id/tvWidgetRecipeName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:padding="8dp"
-        android:text="@string/app_name" />
+        android:layout_margin="4dp"
+        style="@style/ThinSmallText"
+        android:text="@string/the_current_status_of_last_undelivered_order_is" />
 
-    <ListView
-        android:id="@+id/lvWidgetIngredientList"
+    <TextView
+        android:id="@+id/tvWidgetOrderStatus"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        style="@style/LightMediumText"
+        android:layout_margin="4dp"
+        android:layout_height="wrap_content" />
 </LinearLayout>

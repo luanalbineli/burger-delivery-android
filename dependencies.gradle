@@ -12,7 +12,8 @@ ext {
             timber                  : '4.5.1',
             dagger                  : '2.10',
             butterKnife             : '8.8.1',
-            fresco                  : '1.5.0'
+            fresco                  : '1.5.0',
+            stetho                  : '1.5.0'
     ]
 
     supportV13 = "com.android.support:support-v13:$versions.support"
@@ -31,6 +32,8 @@ ext {
             "com.squareup.retrofit2:retrofit-mock:$versions.retrofit",
             "com.squareup.okhttp3:logging-interceptor:$versions.okHttpLoggingInterceptor"
     ]
+
+    stetho = "com.facebook.stetho:stetho:$versions.stetho"
 
     rxJava = [
             "io.reactivex.rxjava2:rxjava:$versions.rxJava",

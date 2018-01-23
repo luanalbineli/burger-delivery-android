@@ -7,16 +7,11 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.burgerdelivery.BurgerDeliveryApplication;
+import com.burgerdelivery.R;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
+import com.burgerdelivery.model.OrderItemModel;
 import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.repository.BurgerRepository;
-import com.udacity.bakingtime.BakingTimeApplication;
-import com.udacity.bakingtime.R;
-import com.udacity.bakingtime.injector.components.DaggerFragmentComponent;
-import com.udacity.bakingtime.model.RecipeIngredientModel;
-import com.udacity.bakingtime.model.RecipeModel;
-import com.udacity.bakingtime.recipedetail.ingredientlist.IngredientListAdapter;
-import com.udacity.bakingtime.repository.RecipeRepository;
 
 import javax.inject.Inject;
 
@@ -55,7 +50,7 @@ public class RecipeIngredientListViewService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
-            //mOrderModel = mRecipeRepository.getCachedRecipeByWidgetId(mAppWidgetId);
+            mOrderModel = mRecipeRepository.getCurrentPendingOrder().blockingGet();
             Timber.i("WidgetRemoteViewsFactory - recipe model: " + mOrderModel);
         }
 
@@ -66,21 +61,17 @@ public class RecipeIngredientListViewService extends RemoteViewsService {
 
         @Override
         public int getCount() {
-            Timber.i("WidgetRemoteViewsFactory - getCount(): " + mOrderModel.getIngredientList().size());
-            return mOrderModel.getIngredientList().size();
+            return mOrderModel.getItemList().size();
         }
 
         @Override
         public RemoteViews getViewAt(int position) {
-            RecipeIngredientModel ingredientModel = mOrderModel.getIngredientList().get(position);
-            RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.ingredient_item_widget);
+            OrderItemModel orderItemModel = mOrderModel.getItemList().get(position);
+            RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.widget_order_item);
 
-            String formattedQuantity = IngredientListAdapter.QUANTITY_FORMAT.format(ingredientModel.getQuantity());
-            remoteViews.setTextViewText(R.id.tvRecipeIngredientQuantity, formattedQuantity);
+            remoteViews.setTextViewText(R.id.tvWidgetOrderItemQuantity, String.valueOf(orderItemModel.getQuantity()));
 
-            remoteViews.setTextViewText(R.id.tvRecipeIngredientMeasurementUnit, ingredientModel.getMeasure());
-
-            remoteViews.setTextViewText(R.id.tvRecipeIngredientName, ingredientModel.getIngredient());
+            remoteViews.setTextViewText(R.id.tvWidgetOrderItemBurgerName, orderItemModel.getBurgerModel().getName());
             return remoteViews;
         }
 

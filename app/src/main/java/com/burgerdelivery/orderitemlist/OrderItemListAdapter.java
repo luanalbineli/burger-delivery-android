@@ -18,7 +18,7 @@ public class OrderItemListAdapter extends CustomRecyclerViewAdapter<OrderItemMod
 
     @Override
     protected OrderItemListVH onCreateItemViewHolder(LayoutInflater layoutInflater, ViewGroup parent, int viewType) {
-        return new OrderItemListVH(layoutInflater.inflate(R.layout.burger_item, parent, false));
+        return new OrderItemListVH(layoutInflater.inflate(R.layout.order_item, parent, false));
     }
 
     @Override

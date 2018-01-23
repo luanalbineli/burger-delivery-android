@@ -23,6 +23,7 @@
         </activity>
 
         <activity android:name=".orderitemlist.OrderItemListActivity"
+            android:label="@string/order_detail"
             android:parentActivityName=".MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data

@@ -45,12 +45,11 @@ public class BurgerProvider extends ContentProvider {
 
         SQLiteDatabase sqLiteDatabase = mMovieDatabase.getReadableDatabase();
 
-        if (code == CODE_ORDER_ITEMS) {
-            selection = BurgerDeliveryContract.OrderEntry._ID + " = ?";
-            selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-        }
+        String tableName = code == CODE_ORDER ?
+                BurgerDeliveryContract.OrderEntry.TABLE_NAME :
+                BurgerDeliveryContract.OrderItemEntry.TABLE_NAME;
 
-        final Cursor cursor = sqLiteDatabase.query(BurgerDeliveryContract.OrderEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, sort);
+        final Cursor cursor = sqLiteDatabase.query(tableName, columns, selection, selectionArgs, null, null, sort);
 
         final Context context = getContext();
         if (context != null) {

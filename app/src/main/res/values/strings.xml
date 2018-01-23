@@ -19,4 +19,6 @@
     <string name="successfully_created_order_item">Successfully created the order item</string>
     <string name="remove">Remove</string>
     <string name="contentDescriptionDeleteOrderItem">Image button used to remove an item from the order</string>
+    <string name="the_current_status_of_last_undelivered_order_is">The current status of your last undelivered order is:</string>
+    <string name="order_detail">Order detail</string>
 </resources>

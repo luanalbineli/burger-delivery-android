@@ -25,7 +25,7 @@ public class OrderItemListLoader extends AsyncTaskLoaderExecutor<List<OrderItemM
         Timber.d("Fetching the order item list from the SQLite database.");
         try {
             OrderModel orderModel = mBurgerRepository.getCurrentPendingOrder().blockingGet();
-            if (orderModel == null) {
+            if (orderModel == OrderModel.EMPTY) {
                 return new ArrayList<>(0);
             }
             return mBurgerRepository.getItemsByOrderId(orderModel.getId()).blockingGet();

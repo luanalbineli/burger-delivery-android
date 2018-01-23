@@ -10,6 +10,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.listener.RequestListener;
 import com.facebook.imagepipeline.listener.RequestLoggingListener;
+import com.facebook.stetho.Stetho;
 
 import java.util.HashSet;
 
@@ -23,6 +24,8 @@ public class BurgerDeliveryApplication extends Application {
         super.onCreate();
 
         Timber.plant(new Timber.DebugTree());
+
+        Stetho.initializeWithDefaults(this);
 
         HashSet<RequestListener> requestListeners = new HashSet<>();
         requestListeners.add(new RequestLoggingListener());

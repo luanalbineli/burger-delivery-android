@@ -14,39 +14,41 @@ import java.util.List;
 public class OrderModel {
     public static final OrderModel EMPTY = new OrderModel(Integer.MIN_VALUE);
 
-    private List<OrderItemModel> mItemList;
-    private Date mDate;
-    private int mStatus;
-    private int mId;
+    private List<OrderItemModel> itemList;
+    private Date date;
+    private int status;
+    private int id;
+
+    private int mServerId;
 
     public OrderModel(@OrderStatus int status, Date date) {
-        mStatus = status;
-        mDate = date;
+        this.status = status;
+        this.date = date;
     }
 
     private OrderModel(int id, @OrderStatus int status, Date date) {
         this(status, date);
 
-        mId = id;
+        this.id = id;
     }
 
     private OrderModel(int id) {
-        mId = id;
+        this.id = id;
     }
 
     public void addItemToOrder(OrderItemModel orderItemModel) {
         preCheckItemList();
-        mItemList.add(orderItemModel);
+        itemList.add(orderItemModel);
     }
 
     public List<OrderItemModel> getItemList() {
         preCheckItemList();
-        return mItemList;
+        return itemList;
     }
 
     private void preCheckItemList() {
-        if (mItemList == null) {
-            mItemList = new ArrayList<>();
+        if (itemList == null) {
+            itemList = new ArrayList<>();
         }
     }
 
@@ -60,13 +62,13 @@ public class OrderModel {
 
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(BurgerDeliveryContract.OrderEntry.COLUMN_STATUS, mStatus);
-        contentValues.put(BurgerDeliveryContract.OrderEntry.COLUMN_DATE, mDate.getTime());
+        contentValues.put(BurgerDeliveryContract.OrderEntry.COLUMN_STATUS, status);
+        contentValues.put(BurgerDeliveryContract.OrderEntry.COLUMN_DATE, date.getTime());
         return contentValues;
     }
 
     public int getId() {
-        return mId;
+        return id;
     }
 
     @Override
@@ -84,7 +86,7 @@ public class OrderModel {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 53 * hash + this.mId;
+        hash = 53 * hash + this.id;
         return hash;
     }
 }

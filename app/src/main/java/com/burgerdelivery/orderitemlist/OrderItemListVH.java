@@ -1,10 +1,10 @@
 package com.burgerdelivery.orderitemlist;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.burgerdelivery.R;
-import com.burgerdelivery.model.BurgerModel;
 import com.burgerdelivery.model.OrderItemModel;
 import com.burgerdelivery.ui.recyclerview.CustomRecyclerViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -12,20 +12,24 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.burgerdelivery.util.Defaults.DEFAULT_PRICE_FORMAT;
-
 class OrderItemListVH extends CustomRecyclerViewHolder {
-    @BindView(R.id.sdvBurgerItemImage)
+    @BindView(R.id.sdvOrderItemBurgerImage)
     SimpleDraweeView burgerImageSimpleDraweeView;
 
-    @BindView(R.id.tvBurgerItemName)
+    @BindView(R.id.tvOrderItemBurgerName)
     TextView burgerNameTextView;
 
-    @BindView(R.id.tvBurgerItemPrice)
-    TextView burgerPriceTextView;
+    @BindView(R.id.ivOrderItemRemove)
+    ImageView orderItemRemoveImageView;
 
-    @BindView(R.id.tvBurgerItemDescription)
-    TextView burgerDescriptionTextView;
+    @BindView(R.id.ivOrderItemQuantityAdd)
+    ImageView orderItemQuantityAddImageView;
+
+    @BindView(R.id.ivOrderItemQuantityRemove)
+    ImageView orderItemQuantityRemoveImageView;
+
+    @BindView(R.id.tvOrderItemQuantity)
+    TextView orderItemQuantityTextView;
 
     OrderItemListVH(View itemView) {
         super(itemView);
