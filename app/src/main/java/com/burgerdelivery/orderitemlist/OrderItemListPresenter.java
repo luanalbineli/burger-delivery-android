@@ -28,6 +28,8 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
         Timber.d("LOADED THE BURGER LIST: " + data);
         if (data == null) {
             mView.showErrorLoadingBurgerList();
+        } else if (data.size() == 0) {
+            mView.showEmptyOrderListMessage();
         } else {
             mView.showOrderItemList(data);
         }

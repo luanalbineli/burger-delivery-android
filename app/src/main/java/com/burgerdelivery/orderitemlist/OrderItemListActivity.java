@@ -40,7 +40,7 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
     @Inject
     BurgerRepository mBurgerRepository;
 
-    @BindView(R.id.rvList)
+    @BindView(R.id.rvOrderItemList)
     RecyclerView mListRecyclerView;
 
     private OrderItemListAdapter mAdapter;
@@ -48,7 +48,7 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.recycler_view);
+        setContentView(R.layout.activity_order_item_list);
 
         ButterKnife.bind(this);
 
@@ -60,6 +60,12 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
         }
 
         mPresenter.start(new OrderItemListViewModel());
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     private void configureRecyclerView() {
@@ -142,6 +148,11 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
     @Override
     public void showBurgerDetail(OrderItemModel orderItemModel) {
 
+    }
+
+    @Override
+    public void showEmptyOrderListMessage() {
+        mAdapter.showEmptyMessage();
     }
 
     @Override

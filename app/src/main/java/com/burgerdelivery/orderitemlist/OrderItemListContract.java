@@ -23,6 +23,8 @@ interface OrderItemListContract {
         void hideLoadingIndicator();
 
         void showBurgerDetail(OrderItemModel orderItemModel);
+
+        void showEmptyOrderListMessage();
     }
 
     interface Presenter extends BasePresenter<View> {
