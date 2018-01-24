@@ -33,7 +33,7 @@ android {
 }
 
 dependencies {
-    def libs = [supportV7] + constraintLayout + recyclerView + design + gson + retrofit + timber + supportAnnotations + fresco + fancyButton + rxJava
+    def libs = [supportV7] + constraintLayout + recyclerView + design + gson + retrofit + timber + supportAnnotations + fresco + fancyButton + rxJava + cardView
     implementation libs
 
     implementation stetho

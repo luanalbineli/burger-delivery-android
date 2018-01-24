@@ -3,7 +3,10 @@ package com.burgerdelivery.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.burgerdelivery.R;
+import com.burgerdelivery.enunn.AdditionalItemStatus;
 import com.burgerdelivery.repository.contentprovider.BurgerDeliveryContract;
+import com.burgerdelivery.util.BitFlag;
 import com.burgerdelivery.util.SQLUtil;
 
 public class OrderItemModel {
@@ -59,5 +62,39 @@ public class OrderItemModel {
 
     public BurgerModel getBurgerModel() {
         return burgerModel;
+    }
+
+    public int getAdditional() {
+        return additional;
+    }
+
+    public float getSubtotalValue() {
+        return (float) this.quantity * this.burgerModel.getPrice();
+    }
+
+    public float getAdditionalValue() {
+        if (additional == 0) {
+            return 0;
+        }
+
+        BitFlag bitFlag = new BitFlag(additional);
+        float additionalValue = 0;
+        if (bitFlag.isSet(AdditionalItemStatus.BURGER)) {
+            additionalValue += 4;
+        }
+
+        if (bitFlag.isSet(AdditionalItemStatus.CHEDDAR)) {
+            additionalValue += 2.5f;
+        }
+
+        if (bitFlag.isSet(AdditionalItemStatus.PICKLES)) {
+            additionalValue += 1.25f;
+        }
+
+        return additionalValue * (float) quantity;
+    }
+
+    public float getTotal() {
+        return getSubtotalValue() + getAdditionalValue();
     }
 }

@@ -10,9 +10,14 @@
     <string name="price_format">$ %1$s</string>
     <string name="ingredients">Ingredients</string>
     <string name="additional">Additional</string>
-    <string name="additional_extra_burger">Extra burger (+$4)</string>
-    <string name="additional_extra_cheddar">Extra cheddar (+$2.50)</string>
-    <string name="additional_extra_pickles">Extra pickles (+$1.25)</string>
+    <string name="additional_extra_burger_with_value">Extra burger (+$4)</string>
+    <string name="additional_extra_cheddar_with_value">Extra cheddar (+$2.50)</string>
+    <string name="additional_extra_pickles_with_value">Extra pickles (+$1.25)</string>
+
+    <string name="additional_burger">Burger</string>
+    <string name="additional_cheddar">Cheddar</string>
+    <string name="additional_pickles">Pickles</string>
+
     <string name="observation">Observations</string>
     <string name="add_to_order">Add to order</string>
     <string name="error_creating_order_item">An unknown error occurred while tried to create the order item. Please, try again</string>
@@ -23,4 +28,8 @@
     <string name="order_detail">Order detail</string>
     <string name="finish_order">Finish order</string>
     <string name="total">Total</string>
+    <string name="order_item_list_total_default">-</string>
+    <string name="subtotal">Subtotal:</string>
+    <string name="additional_with_colon">Additional:</string>
+    <string name="total_with_colon">Total:</string>
 </resources>

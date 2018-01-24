@@ -49,7 +49,7 @@ public class BurgerDetailPresenter implements BurgerDetailContract.Presenter {
             return Single.just(orderModel.getId());
         }).flatMap(orderId -> {
             Timber.d("addBurgerToOrder - Order id: " + orderId);
-            OrderItemModel orderItemModel = new OrderItemModel(orderId, additional.getFlags(), observation, 0, mBurgerModel);
+            OrderItemModel orderItemModel = new OrderItemModel(orderId, additional.getFlags(), observation, 1, mBurgerModel);
 
             return mBurgerRepository.insertBurgerItemIntoOrder(orderItemModel);
         }).doOnSubscribe(disposable -> mView.showLoadingIndicator())

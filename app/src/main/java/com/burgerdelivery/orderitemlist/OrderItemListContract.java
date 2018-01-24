@@ -22,9 +22,9 @@ interface OrderItemListContract {
 
         void hideLoadingIndicator();
 
-        void showBurgerDetail(OrderItemModel orderItemModel);
-
         void showEmptyOrderListMessage();
+
+        void disableFinishOrderButton();
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -33,7 +33,5 @@ interface OrderItemListContract {
         void start(OrderItemListViewModel orderItemListViewModel);
 
         void tryToFetchBurgerListAgain();
-
-        void handleBurgerItemClick(OrderItemModel orderItemModel);
     }
 }

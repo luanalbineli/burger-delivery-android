@@ -7,23 +7,21 @@ import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.burgerdelivery.R;
 import com.burgerdelivery.base.BaseActivity;
 import com.burgerdelivery.base.BasePresenter;
-import com.burgerdelivery.burgerdetail.BurgerDetailFragment;
 import com.burgerdelivery.dagger.component.ApplicationComponent;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
-import com.burgerdelivery.model.BurgerModel;
 import com.burgerdelivery.model.OrderItemModel;
 import com.burgerdelivery.model.viewmodel.OrderItemListViewModel;
 import com.burgerdelivery.repository.BurgerRepository;
 import com.burgerdelivery.repository.loader.OrderItemListLoader;
+import com.ekalips.fancybuttonproj.FancyButton;
 
 import java.util.List;
 
@@ -42,6 +40,12 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
 
     @BindView(R.id.rvOrderItemList)
     RecyclerView mListRecyclerView;
+
+    @BindView(R.id.fbOrderItemListFinishOrder)
+    FancyButton mFinishOrderButton;
+
+    @BindView(R.id.tvOrderItemListTotalValue)
+    TextView mOrderTotalValueTextView;
 
     private OrderItemListAdapter mAdapter;
 
@@ -62,22 +66,11 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
         mPresenter.start(new OrderItemListViewModel());
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-
-        return super.onPrepareOptionsMenu(menu);
-    }
-
     private void configureRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mListRecyclerView.setLayoutManager(linearLayoutManager);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, linearLayoutManager.getOrientation());
-        mListRecyclerView.addItemDecoration(dividerItemDecoration);
-
         mAdapter = new OrderItemListAdapter(R.string.item_order_list_is_empty, () -> mPresenter.tryToFetchBurgerListAgain());
-
-        mAdapter.setOnItemClickListener((position, burgerModel) -> mPresenter.handleBurgerItemClick(burgerModel));
 
         mListRecyclerView.setAdapter(mAdapter);
     }
@@ -146,13 +139,13 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
     }
 
     @Override
-    public void showBurgerDetail(OrderItemModel orderItemModel) {
-
+    public void showEmptyOrderListMessage() {
+        mAdapter.showEmptyMessage();
     }
 
     @Override
-    public void showEmptyOrderListMessage() {
-        mAdapter.showEmptyMessage();
+    public void disableFinishOrderButton() {
+        mFinishOrderButton.setEnabled(false);
     }
 
     @Override

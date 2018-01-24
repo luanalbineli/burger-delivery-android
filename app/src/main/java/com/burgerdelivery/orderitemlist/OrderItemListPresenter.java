@@ -30,6 +30,7 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
             mView.showErrorLoadingBurgerList();
         } else if (data.size() == 0) {
             mView.showEmptyOrderListMessage();
+            mView.disableFinishOrderButton();
         } else {
             mView.showOrderItemList(data);
         }
@@ -52,10 +53,5 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
     public void tryToFetchBurgerListAgain() {
         mView.showLoadingIndicator();
         mView.tryToFetchBurgerListUsingLoaderAgain();
-    }
-
-    @Override
-    public void handleBurgerItemClick(OrderItemModel orderItemModel) {
-        mView.showBurgerDetail(orderItemModel);
     }
 }
