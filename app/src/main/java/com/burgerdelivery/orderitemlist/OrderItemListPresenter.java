@@ -2,11 +2,8 @@ package com.burgerdelivery.orderitemlist;
 
 import android.support.annotation.Nullable;
 
-import com.burgerdelivery.model.BurgerModel;
-import com.burgerdelivery.model.OrderItemModel;
+import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.model.viewmodel.OrderItemListViewModel;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -14,6 +11,7 @@ import timber.log.Timber;
 
 public class OrderItemListPresenter implements OrderItemListContract.Presenter {
     private OrderItemListContract.View mView;
+    private OrderModel mOrderModel;
 
     @Inject
     OrderItemListPresenter() { }
@@ -24,15 +22,16 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
     }
 
     @Override
-    public void onOrderItemListLoadingFinished(@Nullable List<OrderItemModel> data) {
-        Timber.d("LOADED THE BURGER LIST: " + data);
-        if (data == null) {
-            mView.showErrorLoadingBurgerList();
-        } else if (data.size() == 0) {
-            mView.showEmptyOrderListMessage();
+    public void onPendingOrderFetched(@Nullable OrderModel orderModel) {
+        mOrderModel = orderModel;
+        if (orderModel == null) {
+            mView.showErrorLoadingOrder();
+        } else if (orderModel == OrderModel.EMPTY) {
+            mView.showNoPendingOrderMessage();
             mView.disableFinishOrderButton();
         } else {
-            mView.showOrderItemList(data);
+            mView.showOrderItemList(orderModel.getItemList());
+            mView.updateOrderTotalValue(orderModel.getTotalValue());
         }
 
         mView.hideLoadingIndicator();
@@ -53,5 +52,15 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
     public void tryToFetchBurgerListAgain() {
         mView.showLoadingIndicator();
         mView.tryToFetchBurgerListUsingLoaderAgain();
+    }
+
+    @Override
+    public void onRemoveItem(int position) {
+        mView.showConfirmationToRemoveOrderItem(position);
+    }
+
+    @Override
+    public void removeItemConfirmed(int position) {
+
     }
 }

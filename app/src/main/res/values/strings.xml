@@ -32,4 +32,8 @@
     <string name="subtotal">Subtotal:</string>
     <string name="additional_with_colon">Additional:</string>
     <string name="total_with_colon">Total:</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="order_item_confirmation_removal_message">Are you sure do you want to remove the item?</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
 </resources>

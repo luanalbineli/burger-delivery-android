@@ -13,7 +13,8 @@ ext {
             dagger                  : '2.10',
             butterKnife             : '8.8.1',
             fresco                  : '1.5.0',
-            stetho                  : '1.5.0'
+            stetho                  : '1.5.0',
+            sweetAlert          : '1.3'
     ]
 
     supportV13 = "com.android.support:support-v13:$versions.support"
@@ -55,6 +56,8 @@ ext {
     timber = "com.jakewharton.timber:timber:$versions.timber"
 
     fresco = "com.facebook.fresco:fresco:$versions.fresco"
+
+    sweetAlert = "cn.pedant.sweetalert:library:$versions.sweetAlert"
 
     butterKnife = "com.jakewharton:butterknife:$versions.butterKnife"
     butterKnifeCompiler = "com.jakewharton:butterknife-compiler:$versions.butterKnife"

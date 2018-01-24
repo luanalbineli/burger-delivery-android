@@ -54,18 +54,16 @@ class OrderItemListVH extends CustomRecyclerViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    void bind(OrderItemModel orderItemModel) {
+    void bind(OrderItemModel orderItemModel, OrderItemListAdapter.IChangeQuantityListener changeQuantityListener, OrderItemListAdapter.IRemoveOrderItemListener removeOrderItemListener) {
         burgerImageSimpleDraweeView.setImageURI(orderItemModel.getBurgerModel().getImageUrl());
 
         burgerNameTextView.setText(orderItemModel.getBurgerModel().getName());
 
-        orderItemRemoveImageView.setOnClickListener(v -> {
-            // TODO: Implement.
-        });
+        orderItemRemoveImageView.setOnClickListener(v -> removeOrderItemListener.removeOrderItem(getAdapterPosition()));
 
-        orderItemQuantityAddImageView.setOnClickListener(v -> {
-            // TODO: Implement.
-        });
+        orderItemQuantityRemoveImageView.setOnClickListener(v -> changeQuantityListener.onChangeQuantity(getAdapterPosition(), -1));
+
+        orderItemQuantityAddImageView.setOnClickListener(v -> changeQuantityListener.onChangeQuantity(getAdapterPosition(), 1));
 
         orderItemQuantityTextView.setText(String.valueOf(orderItemModel.getQuantity()));
 
