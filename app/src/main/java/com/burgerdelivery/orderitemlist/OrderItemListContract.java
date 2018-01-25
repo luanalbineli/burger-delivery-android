@@ -30,6 +30,18 @@ interface OrderItemListContract {
         void updateOrderTotalValue(float total);
 
         void showConfirmationToRemoveOrderItem(int position);
+
+        void showRemovingItemLoadingIndicator();
+
+        void showMessageItemRemovedWithSuccess();
+
+        void hideRemovingItemLoadingIndicator();
+
+        void removeOrderItemFromList(int position);
+
+        void showErrorRemovingOrderItem(Throwable throwable);
+
+        void updateOrderItemByPosition(int position);
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -42,5 +54,7 @@ interface OrderItemListContract {
         void onRemoveItem(int position);
 
         void removeItemConfirmed(int position);
+
+        void onChangeOrderItemQuantity(int position, int value);
     }
 }

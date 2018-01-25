@@ -100,4 +100,8 @@ public class OrderModel {
 
         return totalValue;
     }
+
+    public void removeItemFromOrder(int position) {
+        itemList.remove(position);
+    }
 }

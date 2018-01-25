@@ -3,7 +3,6 @@ package com.burgerdelivery.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.burgerdelivery.R;
 import com.burgerdelivery.enunn.AdditionalItemStatus;
 import com.burgerdelivery.repository.contentprovider.BurgerDeliveryContract;
 import com.burgerdelivery.util.BitFlag;
@@ -14,7 +13,8 @@ public class OrderItemModel {
     private final int orderId;
     private final int additional;
     private final String observation;
-    private final int quantity;
+    private int quantity;
+    private int id;
 
     public OrderItemModel(int orderId, int additional, String observation, int quantity, BurgerModel burgerModel) {
         this.burgerModel = burgerModel;
@@ -22,6 +22,11 @@ public class OrderItemModel {
         this.additional = additional;
         this.observation = observation;
         this.quantity = quantity;
+    }
+
+    private OrderItemModel(int id, int orderId, int additional, String observation, int quantity, BurgerModel burgerModel) {
+        this(orderId, additional, observation, quantity, burgerModel);
+        this.id = id;
     }
 
     public ContentValues getContentValues() {
@@ -42,7 +47,9 @@ public class OrderItemModel {
     }
 
     public static OrderItemModel fromCursor(int orderId, Cursor cursor) {
-        return new OrderItemModel(orderId,
+        return new OrderItemModel(
+                SQLUtil.getInt(cursor, BurgerDeliveryContract.OrderItemEntry._ID),
+                orderId,
                 SQLUtil.getInt(cursor, BurgerDeliveryContract.OrderItemEntry.COLUMN_ADDITIONAL),
                 SQLUtil.getString(cursor, BurgerDeliveryContract.OrderItemEntry.COLUMN_OBSERVATION),
                 SQLUtil.getInt(cursor, BurgerDeliveryContract.OrderItemEntry.COLUMN_QUANTITY),
@@ -96,5 +103,13 @@ public class OrderItemModel {
 
     public float getTotal() {
         return getSubtotalValue() + getAdditionalValue();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

@@ -2,8 +2,10 @@ package com.burgerdelivery.orderitemlist;
 
 import android.support.annotation.Nullable;
 
+import com.burgerdelivery.model.OrderItemModel;
 import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.model.viewmodel.OrderItemListViewModel;
+import com.burgerdelivery.repository.BurgerRepository;
 
 import javax.inject.Inject;
 
@@ -13,8 +15,12 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
     private OrderItemListContract.View mView;
     private OrderModel mOrderModel;
 
+    private final BurgerRepository mBurgerRepository;
+
     @Inject
-    OrderItemListPresenter() { }
+    OrderItemListPresenter(BurgerRepository burgerRepository) {
+        mBurgerRepository = burgerRepository;
+    }
 
     @Override
     public void setView(OrderItemListContract.View view) {
@@ -61,6 +67,32 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
 
     @Override
     public void removeItemConfirmed(int position) {
+        mView.showRemovingItemLoadingIndicator();
+        OrderItemModel orderItemModel = mOrderModel.getItemList().get(position);
+        mBurgerRepository.removeOrderItem(orderItemModel.getId())
+                .doOnTerminate(mView::hideRemovingItemLoadingIndicator)
+                .subscribe(
+                        () -> {
+                            mView.showMessageItemRemovedWithSuccess();
+                            mView.removeOrderItemFromList(position);
 
+                            mOrderModel.removeItemFromOrder(position);
+                            mView.updateOrderTotalValue(mOrderModel.getTotalValue());
+                        },
+                            mView::showErrorRemovingOrderItem);
+    }
+
+    @Override
+    public void onChangeOrderItemQuantity(int position, int value) {
+        OrderItemModel orderItemModel = mOrderModel.getItemList().get(position);
+        int newQuantity = orderItemModel.getQuantity() + value;
+        if (newQuantity == 0) {
+            return;
+        }
+
+        orderItemModel.setQuantity(newQuantity);
+
+        mView.updateOrderItemByPosition(position);
+        mView.updateOrderTotalValue(mOrderModel.getTotalValue());
     }
 }

@@ -99,10 +99,10 @@ public class BurgerProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
+    public int delete(@NonNull Uri uri, @Nullable String where, @Nullable String[] selectionArgs) {
         switch (URI_MATCHER.match(uri)) {
             case CODE_ORDER:
-                throw new IllegalArgumentException("You can only removeOrderItem a movie using the /movie/:movieId path.");
+                throw new IllegalArgumentException("You can only remove items. The order can't be removed");
             case CODE_ORDER_ITEMS:
                 final Context context = getContext();
                 if (context == null) {
@@ -111,9 +111,7 @@ public class BurgerProvider extends ContentProvider {
 
                 final SQLiteDatabase sqLiteDatabase = mMovieDatabase.getWritableDatabase();
 
-                String movieId = uri.getPathSegments().get(1);
-                // Use selections/selectionArgs to filter for this ID
-                final int count = sqLiteDatabase.delete(BurgerDeliveryContract.OrderEntry.TABLE_NAME, BurgerDeliveryContract.OrderEntry._ID + " = ?", new String[] { movieId });
+                final int count = sqLiteDatabase.delete(BurgerDeliveryContract.OrderItemEntry.TABLE_NAME, where, selectionArgs);
 
                 context.getContentResolver().notifyChange(uri, null);
                 return count;

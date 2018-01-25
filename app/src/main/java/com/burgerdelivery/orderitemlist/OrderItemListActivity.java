@@ -4,14 +4,18 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.burgerdelivery.R;
 import com.burgerdelivery.base.BaseActivity;
 import com.burgerdelivery.base.BasePresenter;
@@ -30,7 +34,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import timber.log.Timber;
 
 import static com.burgerdelivery.util.Defaults.DEFAULT_PRICE_FORMAT;
@@ -52,6 +55,7 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
     TextView mOrderTotalValueTextView;
 
     private OrderItemListAdapter mAdapter;
+    private MaterialDialog mCurrentDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -159,20 +163,65 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
 
     @Override
     public void showConfirmationToRemoveOrderItem(int position) {
-        SweetAlertDialog confirmationDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
-        confirmationDialog.setTitleText(getString(R.string.confirmation));
-        confirmationDialog.setContentText(getString(R.string.order_item_confirmation_removal_message));
-        confirmationDialog.setCancelable(false);
-        confirmationDialog.setCancelText(getString(R.string.cancel));
-        confirmationDialog.setConfirmText(getString(R.string.confirm));
+        Timber.d("Showing the confirmation dialog to remove the item on the position: " + position);
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                .title(R.string.confirmation)
+                .content(R.string.order_item_confirmation_removal_message)
+                .positiveText(R.string.confirm)
+                .cancelable(true)
+                .negativeText(R.string.cancel)
+                .onPositive((dialog, which) -> {
+                    Timber.d("The user confirmed the exclusion");
+                    mPresenter.removeItemConfirmed(position);
+                });
 
-        confirmationDialog.setConfirmClickListener(sweetAlertDialog -> mPresenter.removeItemConfirmed(position));
-        confirmationDialog.show();
+        Drawable deleteIcon = AppCompatResources.getDrawable(this, R.drawable.delete);
+        if (deleteIcon != null) {
+            builder.icon(deleteIcon);
+        }
+
+        builder.show();
+    }
+
+    @Override
+    public void showRemovingItemLoadingIndicator() {
+        mCurrentDialog = new MaterialDialog.Builder(this)
+                .title(R.string.removing_item)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .show();
+    }
+
+    @Override
+    public void showMessageItemRemovedWithSuccess() {
+        Toast.makeText(this, R.string.item_removed_with_success_message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void hideRemovingItemLoadingIndicator() {
+        mCurrentDialog.dismiss();
+    }
+
+    @Override
+    public void removeOrderItemFromList(int position) {
+        mAdapter.removeItemByIndex(position);
+    }
+
+    @Override
+    public void showErrorRemovingOrderItem(Throwable throwable) {
+        Timber.e(throwable, "An error occurred while tried to remove the item from the order");
+        Toast.makeText(this, R.string.item_was_not_removed_error_message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void updateOrderItemByPosition(int position) {
+        mAdapter.updateItemByIndex(position);
     }
 
     @Override
     public void onChangeQuantity(int position, int value) {
-
+        Timber.d("Changing the quantity: " + value);
+        mPresenter.onChangeOrderItemQuantity(position, value);
     }
 
     @Override

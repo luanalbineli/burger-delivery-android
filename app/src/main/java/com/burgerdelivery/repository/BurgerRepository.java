@@ -96,6 +96,21 @@ public class BurgerRepository {
         }));
     }
 
+    public Completable removeOrderItem(int orderItemId) {
+        return observeOnMainThread(Completable.create(emitter -> {
+            ContentResolver contentResolver = mBurgerDeliveryApplication.getContentResolver();
+            String where = BurgerDeliveryContract.OrderItemEntry._ID + " = ?";
+            String[] selectionArgs = new String[] { String.valueOf(orderItemId) };
+            int numberOfRemovedItems = contentResolver.delete(BurgerDeliveryContract.OrderItemEntry.CONTENT_URI, where, selectionArgs);
+            if (numberOfRemovedItems == 0) {
+                emitter.onError(new SQLDataException("An internal error occurred"));
+                return;
+            }
+
+            emitter.onComplete();
+        }));
+    }
+
     private Completable observeOnMainThread(Completable completable) {
         return completable.observeOn(AndroidSchedulers.mainThread());
     }
