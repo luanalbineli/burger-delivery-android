@@ -95,4 +95,15 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
         mView.updateOrderItemByPosition(position);
         mView.updateOrderTotalValue(mOrderModel.getTotalValue());
     }
+
+    @Override
+    public void finishOrder() {
+        mBurgerRepository.finishOrder(mOrderModel)
+                .doOnSubscribe(disposable -> mView.showFinishingOrderLoadingIndicator())
+                .doAfterTerminate(mView::hideFinishingOrderLoadingIndicator)
+                .subscribe(finishOrderResponseModel -> {
+                    mBurgerRepository.updateServerOrderId(mOrderModel.getId(), finishOrderResponseModel.getOrderId());
+                }, mView::showErrorFinishingOrder);
+
+    }
 }

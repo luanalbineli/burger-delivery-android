@@ -8,7 +8,10 @@ import com.burgerdelivery.BurgerDeliveryApplication;
 import com.burgerdelivery.enunn.OrderStatus;
 import com.burgerdelivery.model.OrderItemModel;
 import com.burgerdelivery.model.OrderModel;
+import com.burgerdelivery.model.request.OrderRequestModel;
+import com.burgerdelivery.model.response.FinishOrderResponseModel;
 import com.burgerdelivery.repository.contentprovider.BurgerDeliveryContract;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.sql.SQLDataException;
 import java.util.ArrayList;
@@ -20,14 +23,17 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import retrofit2.Retrofit;
 import timber.log.Timber;
 
 public class BurgerRepository {
     private final BurgerDeliveryApplication mBurgerDeliveryApplication;
+    private final Retrofit mRetrofit;
 
     @Inject
-    public BurgerRepository(BurgerDeliveryApplication burgerDeliveryApplication) {
+    public BurgerRepository(BurgerDeliveryApplication burgerDeliveryApplication, Retrofit retrofit) {
         this.mBurgerDeliveryApplication = burgerDeliveryApplication;
+        this.mRetrofit = retrofit;
     }
 
     public Single<Integer> insertBurgerItemIntoOrder(final OrderItemModel orderItemModel) {
@@ -117,5 +123,17 @@ public class BurgerRepository {
 
     private <T> Single<T> observeOnMainThread(Single<T> single) {
         return single.observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<FinishOrderResponseModel> finishOrder(OrderModel orderModel) {
+        OrderRequestModel orderRequestModel = new OrderRequestModel(
+                orderModel,
+                FirebaseInstanceId.getInstance().getToken());
+
+        return observeOnMainThread(mRetrofit.create(APIInterface.class).finishOrder(orderRequestModel));
+    }
+
+    public void updateServerOrderId(int mOrderModelId, int serverOrderId) {
+        // TODO: FINISH.
     }
 }

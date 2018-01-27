@@ -71,6 +71,8 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
             getSupportActionBar().setTitle(R.string.order_detail);
         }
 
+        mFinishOrderButton.setOnClickListener(view -> mPresenter.finishOrder());
+
         mPresenter.start(new OrderItemListViewModel());
     }
 

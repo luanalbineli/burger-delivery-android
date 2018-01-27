@@ -42,6 +42,12 @@ interface OrderItemListContract {
         void showErrorRemovingOrderItem(Throwable throwable);
 
         void updateOrderItemByPosition(int position);
+
+        void showFinishingOrderLoadingIndicator();
+
+        void hideFinishingOrderLoadingIndicator();
+
+        void showErrorFinishingOrder(Throwable throwable);
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -56,5 +62,7 @@ interface OrderItemListContract {
         void removeItemConfirmed(int position);
 
         void onChangeOrderItemQuantity(int position, int value);
+
+        void finishOrder();
     }
 }
