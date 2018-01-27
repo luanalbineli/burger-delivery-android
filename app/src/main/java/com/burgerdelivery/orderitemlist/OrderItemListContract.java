@@ -1,8 +1,11 @@
 package com.burgerdelivery.orderitemlist;
 
+import android.support.annotation.Nullable;
+
 import com.burgerdelivery.base.BasePresenter;
 import com.burgerdelivery.model.BurgerModel;
 import com.burgerdelivery.model.OrderItemModel;
+import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.model.viewmodel.BurgerListViewModel;
 import com.burgerdelivery.model.viewmodel.OrderItemListViewModel;
 
@@ -12,7 +15,7 @@ interface OrderItemListContract {
     interface View {
         void fetchOrderItemListUsingLoader();
 
-        void showErrorLoadingBurgerList();
+        void showErrorLoadingOrder();
 
         void tryToFetchBurgerListUsingLoaderAgain();
 
@@ -22,13 +25,15 @@ interface OrderItemListContract {
 
         void hideLoadingIndicator();
 
-        void showEmptyOrderListMessage();
+        void showNoPendingOrderMessage();
 
         void disableFinishOrderButton();
+
+        void updateOrderTotalValue(float total);
     }
 
     interface Presenter extends BasePresenter<View> {
-        void onOrderItemListLoadingFinished(List<OrderItemModel> data);
+        void onPendingOrderFetched(@Nullable OrderModel orderModel);
 
         void start(OrderItemListViewModel orderItemListViewModel);
 

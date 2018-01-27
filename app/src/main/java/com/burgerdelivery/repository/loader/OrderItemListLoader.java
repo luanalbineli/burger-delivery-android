@@ -11,7 +11,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class OrderItemListLoader extends AsyncTaskLoaderExecutor<List<OrderItemModel>> {
+public class OrderItemListLoader extends AsyncTaskLoaderExecutor<OrderModel> {
     private final BurgerRepository mBurgerRepository;
 
     public OrderItemListLoader(Context context, BurgerRepository burgerRepository) {
@@ -21,14 +21,18 @@ public class OrderItemListLoader extends AsyncTaskLoaderExecutor<List<OrderItemM
     }
 
     @Override
-    public List<OrderItemModel> loadInBackground() {
+    public OrderModel loadInBackground() {
         Timber.d("Fetching the order item list from the SQLite database.");
         try {
             OrderModel orderModel = mBurgerRepository.getCurrentPendingOrder().blockingGet();
-            if (orderModel == OrderModel.EMPTY) {
-                return new ArrayList<>(0);
+            if (orderModel != OrderModel.EMPTY) {
+                List<OrderItemModel> orderItemList = mBurgerRepository.getItemsByOrderId(orderModel.getId()).blockingGet();
+                for (OrderItemModel orderItemModel : orderItemList) {
+                    orderModel.addItemToOrder(orderItemModel);
+                }
             }
-            return mBurgerRepository.getItemsByOrderId(orderModel.getId()).blockingGet();
+
+            return orderModel;
         } catch (Exception e) {
             Timber.e(e, "An error occurred while tried to fetch the order item list");
             return null;

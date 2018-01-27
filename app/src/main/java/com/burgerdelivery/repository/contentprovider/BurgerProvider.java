@@ -102,7 +102,7 @@ public class BurgerProvider extends ContentProvider {
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         switch (URI_MATCHER.match(uri)) {
             case CODE_ORDER:
-                throw new IllegalArgumentException("You can only remove a movie using the /movie/:movieId path.");
+                throw new IllegalArgumentException("You can only removeOrderItem a movie using the /movie/:movieId path.");
             case CODE_ORDER_ITEMS:
                 final Context context = getContext();
                 if (context == null) {

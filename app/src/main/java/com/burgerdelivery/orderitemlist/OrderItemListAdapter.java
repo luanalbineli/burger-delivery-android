@@ -12,8 +12,15 @@ import com.burgerdelivery.ui.RequestStatusView;
 import com.burgerdelivery.ui.recyclerview.CustomRecyclerViewAdapter;
 
 public class OrderItemListAdapter extends CustomRecyclerViewAdapter<OrderItemModel, OrderItemListVH> {
-    OrderItemListAdapter(@StringRes int emptyMessageResId, @Nullable RequestStatusView.ITryAgainListener tryAgainClickListener) {
+    private final IChangeQuantityListener mChangeQuantityListener;
+    private final IRemoveOrderItemListener mRemoveOrderItemListener;
+
+    OrderItemListAdapter(@StringRes int emptyMessageResId, @Nullable RequestStatusView.ITryAgainListener tryAgainClickListener, IChangeQuantityListener changeQuantityListener, IRemoveOrderItemListener removeOrderItemListener) {
         super(emptyMessageResId, tryAgainClickListener);
+
+        this.mChangeQuantityListener = changeQuantityListener;
+
+        this.mRemoveOrderItemListener = removeOrderItemListener;
     }
 
     @Override
@@ -24,6 +31,14 @@ public class OrderItemListAdapter extends CustomRecyclerViewAdapter<OrderItemMod
     @Override
     protected void onBindItemViewHolder(OrderItemListVH holder, int position) {
         OrderItemModel orderItemModel = getItemByPosition(position);
-        holder.bind(orderItemModel);
+        holder.bind(orderItemModel, mChangeQuantityListener, mRemoveOrderItemListener);
+    }
+
+    interface IChangeQuantityListener {
+        void onChangeQuantity(int position, int value);
+    }
+
+    interface IRemoveOrderItemListener {
+        void removeOrderItem(int position);
     }
 }

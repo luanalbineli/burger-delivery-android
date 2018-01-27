@@ -89,4 +89,15 @@ public class OrderModel {
         hash = 53 * hash + this.id;
         return hash;
     }
+
+    public float getTotalValue() {
+        float totalValue = 0;
+        if (itemList != null) {
+            for (OrderItemModel orderItemModel: itemList) {
+                totalValue += orderItemModel.getTotal();
+            }
+        }
+
+        return totalValue;
+    }
 }

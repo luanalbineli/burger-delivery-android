@@ -18,6 +18,7 @@ import com.burgerdelivery.base.BasePresenter;
 import com.burgerdelivery.dagger.component.ApplicationComponent;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
 import com.burgerdelivery.model.OrderItemModel;
+import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.model.viewmodel.OrderItemListViewModel;
 import com.burgerdelivery.repository.BurgerRepository;
 import com.burgerdelivery.repository.loader.OrderItemListLoader;
@@ -31,7 +32,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class OrderItemListActivity extends BaseActivity<OrderItemListContract.View> implements OrderItemListContract.View {
+import static com.burgerdelivery.util.Defaults.DEFAULT_PRICE_FORMAT;
+
+public class OrderItemListActivity extends BaseActivity<OrderItemListContract.View> implements OrderItemListContract.View, OrderItemListAdapter.IChangeQuantityListener, OrderItemListAdapter.IRemoveOrderItemListener {
     @Inject
     OrderItemListPresenter mPresenter;
 
@@ -70,7 +73,7 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mListRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mAdapter = new OrderItemListAdapter(R.string.item_order_list_is_empty, () -> mPresenter.tryToFetchBurgerListAgain());
+        mAdapter = new OrderItemListAdapter(R.string.item_order_list_is_empty, () -> mPresenter.tryToFetchBurgerListAgain(), this, this);
 
         mListRecyclerView.setAdapter(mAdapter);
     }
@@ -96,23 +99,23 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
         getLoaderManager().restartLoader(TASK_ID, null, getLoaderCallback());
     }
 
-    private LoaderManager.LoaderCallbacks<List<OrderItemModel>> getLoaderCallback() {
-        return new LoaderManager.LoaderCallbacks<List<OrderItemModel>>() {
+    private LoaderManager.LoaderCallbacks<OrderModel> getLoaderCallback() {
+        return new LoaderManager.LoaderCallbacks<OrderModel>() {
 
             @Override
-            public Loader<List<OrderItemModel>> onCreateLoader(int id, Bundle args) {
+            public Loader<OrderModel> onCreateLoader(int id, Bundle args) {
                 Timber.d("onCreateLoader - Creating the loader, id: " + id);
                 return new OrderItemListLoader(OrderItemListActivity.this, mBurgerRepository);
             }
 
             @Override
-            public void onLoadFinished(Loader<List<OrderItemModel>> loader, List<OrderItemModel> data) {
+            public void onLoadFinished(Loader<OrderModel> loader, OrderModel data) {
                 Timber.i("onLoadFinished - Finished the loading: " + data);
-                mPresenter.onOrderItemListLoadingFinished(data);
+                mPresenter.onPendingOrderFetched(data);
             }
 
             @Override
-            public void onLoaderReset(Loader<List<OrderItemModel>> loader) {
+            public void onLoaderReset(Loader<OrderModel> loader) {
                 Timber.d("onLoaderReset - Reset the loader");
             }
         };
@@ -124,7 +127,7 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
     }
 
     @Override
-    public void showErrorLoadingBurgerList() {
+    public void showErrorLoadingOrder() {
         mAdapter.showErrorMessage();
     }
 
@@ -139,13 +142,28 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
     }
 
     @Override
-    public void showEmptyOrderListMessage() {
+    public void showNoPendingOrderMessage() {
         mAdapter.showEmptyMessage();
     }
 
     @Override
     public void disableFinishOrderButton() {
         mFinishOrderButton.setEnabled(false);
+    }
+
+    @Override
+    public void updateOrderTotalValue(float total) {
+        mOrderTotalValueTextView.setText(String.format(getString(R.string.price_format), DEFAULT_PRICE_FORMAT.format(total)));
+    }
+
+    @Override
+    public void onChangeQuantity(int position, int value) {
+
+    }
+
+    @Override
+    public void removeOrderItem(int position) {
+
     }
 
     @Override
