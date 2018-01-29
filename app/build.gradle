@@ -43,3 +43,5 @@ dependencies {
     implementation butterKnife
     annotationProcessor butterKnifeCompiler
 }
+
+apply plugin: 'com.google.gms.google-services'

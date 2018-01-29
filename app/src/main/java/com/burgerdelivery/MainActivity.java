@@ -10,9 +10,11 @@ import android.view.MenuItem;
 
 import com.burgerdelivery.burgerlist.BurgerListFragment;
 import com.burgerdelivery.orderitemlist.OrderItemListActivity;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
     @BindView(R.id.toolbar)
@@ -34,6 +36,10 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         }
 
         getFragmentManager().addOnBackStackChangedListener(this);
+
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Timber.d("Refreshed token: " + refreshedToken);
+
     }
 
     @Override

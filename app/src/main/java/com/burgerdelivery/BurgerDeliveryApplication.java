@@ -11,6 +11,7 @@ import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.listener.RequestListener;
 import com.facebook.imagepipeline.listener.RequestLoggingListener;
 import com.facebook.stetho.Stetho;
+import com.google.firebase.FirebaseApp;
 
 import java.util.HashSet;
 
@@ -26,6 +27,9 @@ public class BurgerDeliveryApplication extends Application {
         Timber.plant(new Timber.DebugTree());
 
         Stetho.initializeWithDefaults(this);
+
+        FirebaseApp.initializeApp(this);
+        Timber.d("Initialized Firebase");
 
         HashSet<RequestListener> requestListeners = new HashSet<>();
         requestListeners.add(new RequestLoggingListener());
