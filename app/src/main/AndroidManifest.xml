@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.burgerdelivery">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,7 +23,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".orderitemlist.OrderItemListActivity"
+        <activity
+            android:name=".orderitemlist.OrderItemListActivity"
             android:label="@string/order_detail"
             android:parentActivityName=".MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -51,6 +53,19 @@
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <service android:name=".firebase.FirebaseMessagingEvent">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".firebase.BurgerFirebaseInstanceIdServer">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

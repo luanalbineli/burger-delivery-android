@@ -32,4 +32,13 @@
     <string name="subtotal">Subtotal:</string>
     <string name="additional_with_colon">Additional:</string>
     <string name="total_with_colon">Total:</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="order_item_confirmation_removal_message">Are you sure do you want to remove the item?</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="removing_item">Removing item</string>
+    <string name="please_wait">Please, wait a little</string>
+    <string name="item_removed_with_success_message">The item was removed from your order</string>
+    <string name="item_was_not_removed_error_message">The item was not removed. Please, try again</string>
+    <string name="error_creating_order">An error occurred while tried to create the order. Please, try again.</string>
 </resources>

@@ -28,8 +28,8 @@ public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRec
 
     private @Nullable IItemClickListener<TItem> mOnItemClickListener;
 
-    protected CustomRecyclerViewAdapter() {
-        this(new ArrayList<TItem>());
+    private CustomRecyclerViewAdapter() {
+        this(new ArrayList<>());
     }
 
     private CustomRecyclerViewAdapter(List<TItem> items) {
@@ -61,12 +61,9 @@ public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRec
 
 
         onBindItemViewHolder((THolder) holder, position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnItemClickListener != null) {
-                    mOnItemClickListener.click(holder.getAdapterPosition(), mItems.get(holder.getAdapterPosition()));
-                }
+        holder.itemView.setOnClickListener(v -> {
+            if (mOnItemClickListener != null) {
+                mOnItemClickListener.click(holder.getAdapterPosition(), mItems.get(holder.getAdapterPosition()));
             }
         });
     }
@@ -104,31 +101,13 @@ public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRec
         notifyItemRangeInserted(itemCount, items.size());
     }
 
-    void replaceItems(List<TItem> items) {
-        redrawGridStatus(RequestStatus.HIDDEN);
-
-        clearItems();
-
-        mItems.addAll(items);
-        notifyItemRangeInserted(0, items.size());
-    }
-
-    void clearItems() {
-        int itemCount = mItems.size();
-        if (itemCount > 0) {
-            mItems.clear();
-            notifyItemRangeRemoved(0, itemCount);
-        }
-    }
-
-    void removeItemByIndex(int index) {
+    public void removeItemByIndex(int index) {
         mItems.remove(index);
         notifyItemRemoved(index);
     }
 
-    void insertItemByIndex(TItem item, int index) {
-        mItems.add(index, item);
-        notifyItemInserted(index);
+    public void updateItemByIndex(int index) {
+        notifyItemChanged(index);
     }
 
     public void showLoading() {
