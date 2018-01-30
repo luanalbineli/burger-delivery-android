@@ -41,4 +41,10 @@
     <string name="item_removed_with_success_message">The item was removed from your order</string>
     <string name="item_was_not_removed_error_message">The item was not removed. Please, try again</string>
     <string name="error_creating_order">An error occurred while tried to create the order. Please, try again.</string>
+
+
+
+    <!-- FCM notification channel -->
+    <string name="default_notification_channel_id" translatable="false">fcm_burger_channel</string>
+    <string name="default_notification_channel_name" translatable="true">Order updates</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.burgerdelivery.repository;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -133,7 +134,32 @@ public class BurgerRepository {
         return observeOnMainThread(mRetrofit.create(APIInterface.class).finishOrder(orderRequestModel));
     }
 
-    public void updateServerOrderId(int mOrderModelId, int serverOrderId) {
-        // TODO: FINISH.
+    public Completable updateSentOrderById(int orderId, int serverId) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(BurgerDeliveryContract.OrderEntry.COLUMN_STATUS, OrderStatus.SENT);
+        contentValues.put(BurgerDeliveryContract.OrderEntry.COLUMN_SERVER_ID, serverId);
+
+        return observeOnMainThread(Completable.create(emitter -> {
+            ContentResolver contentResolver = mBurgerDeliveryApplication.getContentResolver();
+            String where = BurgerDeliveryContract.OrderEntry._ID + " = ?";
+            String[] selectionArgs = new String[] { String.valueOf(orderId) };
+            contentResolver.update(BurgerDeliveryContract.OrderEntry.CONTENT_URI, contentValues, where, selectionArgs);
+
+            emitter.onComplete();
+        }));
+    }
+
+    public Completable updateOrderStatusByServerId(int serverId, int status) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(BurgerDeliveryContract.OrderEntry.COLUMN_STATUS, status);
+
+        return observeOnMainThread(Completable.create(emitter -> {
+            ContentResolver contentResolver = mBurgerDeliveryApplication.getContentResolver();
+            String where = BurgerDeliveryContract.OrderEntry.COLUMN_SERVER_ID + " = ?";
+            String[] selectionArgs = new String[] { String.valueOf(serverId) };
+            contentResolver.update(BurgerDeliveryContract.OrderEntry.CONTENT_URI, contentValues, where, selectionArgs);
+
+            emitter.onComplete();
+        }));
     }
 }

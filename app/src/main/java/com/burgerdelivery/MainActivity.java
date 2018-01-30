@@ -1,7 +1,10 @@
 package com.burgerdelivery;
 
 import android.app.FragmentManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -37,9 +40,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
         getFragmentManager().addOnBackStackChangedListener(this);
 
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Timber.d("Refreshed token: " + refreshedToken);
-
+        configureOrderNotificationUpdates();
     }
 
     @Override
@@ -73,6 +74,20 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         boolean shouldDisplayBackButton = getFragmentManager().getBackStackEntryCount() > 0;
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(shouldDisplayBackButton);
+        }
+    }
+
+    private void configureOrderNotificationUpdates() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return;
+        }
+
+        // Create channel to show notifications about the order updates.
+        String channelId  = getString(R.string.default_notification_channel_id);
+        String channelName = getString(R.string.default_notification_channel_name);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH));
         }
     }
 }

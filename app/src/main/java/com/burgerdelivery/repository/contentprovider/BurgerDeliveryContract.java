@@ -23,6 +23,8 @@ public abstract class BurgerDeliveryContract {
 
         public static final String COLUMN_DATE = "date";
 
+        public static final String COLUMN_SERVER_ID = "serverId";
+
         public static Uri buildOrderWithId(int id) {
             return CONTENT_URI.buildUpon()
                     .appendPath(String.valueOf(id))

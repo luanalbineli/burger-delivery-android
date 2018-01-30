@@ -3,10 +3,10 @@ package com.burgerdelivery.model.response;
 import com.google.gson.annotations.SerializedName;
 
 public class FinishOrderResponseModel {
-    @SerializedName("orderId")
-    private int orderId;
+    @SerializedName("id")
+    private int id;
 
-    public int getOrderId() {
-        return orderId;
+    public int getId() {
+        return id;
     }
 }

@@ -121,8 +121,27 @@ public class BurgerProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        throw new RuntimeException("Not implemented");
+    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String where, @Nullable String[] selectionArgs) {
+        switch (URI_MATCHER.match(uri)) {
+            case CODE_ORDER:
+                final Context context = getContext();
+                if (context == null) {
+                    return 0;
+                }
+
+                final SQLiteDatabase sqLiteDatabase = mMovieDatabase.getWritableDatabase();
+                final int count = sqLiteDatabase.update(BurgerDeliveryContract.OrderItemEntry.TABLE_NAME, contentValues, where, selectionArgs);
+                if (count == 0) {
+                    throw new SQLException("Failed to update the order " + uri);
+                }
+
+                context.getContentResolver().notifyChange(uri, null);
+                return count;
+            case CODE_ORDER_ITEMS:
+                throw new IllegalArgumentException("You can't update order items");
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
     }
 
     private @Nullable SQLiteDatabase getWritableDatabase() {

@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 
 import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.model.OrderItemModel;
-import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.model.viewmodel.OrderItemListViewModel;
 
 import com.burgerdelivery.repository.BurgerRepository;
@@ -103,9 +102,10 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
         mBurgerRepository.finishOrder(mOrderModel)
                 .doOnSubscribe(disposable -> mView.showFinishingOrderLoadingIndicator())
                 .doAfterTerminate(mView::hideFinishingOrderLoadingIndicator)
-                .subscribe(finishOrderResponseModel -> {
-                    mBurgerRepository.updateServerOrderId(mOrderModel.getId(), finishOrderResponseModel.getOrderId());
-                }, mView::showErrorFinishingOrder);
+                .subscribe(finishOrderResponseModel ->
+                        mBurgerRepository.updateSentOrderById(mOrderModel.getId(), finishOrderResponseModel.getId()),
+                        mView::showErrorFinishingOrder
+                );
 
     }
 }

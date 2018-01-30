@@ -19,17 +19,18 @@ public class OrderModel {
     private int status;
     private int id;
 
-    private int mServerId;
+    private int serverId;
 
     public OrderModel(@OrderStatus int status, Date date) {
         this.status = status;
         this.date = date;
     }
 
-    private OrderModel(int id, @OrderStatus int status, Date date) {
+    private OrderModel(int id, @OrderStatus int status, Date date, int serverId) {
         this(status, date);
 
         this.id = id;
+        this.serverId = serverId;
     }
 
     private OrderModel(int id) {
@@ -56,7 +57,8 @@ public class OrderModel {
         return new OrderModel(
                 SQLUtil.getInt(cursor, BurgerDeliveryContract.OrderEntry._ID),
                 SQLUtil.getInt(cursor, BurgerDeliveryContract.OrderEntry.COLUMN_STATUS),
-                SQLUtil.getDate(cursor, BurgerDeliveryContract.OrderEntry.COLUMN_DATE)
+                SQLUtil.getDate(cursor, BurgerDeliveryContract.OrderEntry.COLUMN_DATE),
+                SQLUtil.getInt(cursor, BurgerDeliveryContract.OrderEntry.COLUMN_SERVER_ID)
         );
     }
 

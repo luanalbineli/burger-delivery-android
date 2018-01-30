@@ -18,6 +18,7 @@ public class OrderDatabase extends SQLiteOpenHelper {
         final String CREATE_TABLE_ORDER = "CREATE TABLE " + BurgerDeliveryContract.OrderEntry.TABLE_NAME + " (" +
                 BurgerDeliveryContract.OrderEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 BurgerDeliveryContract.OrderEntry.COLUMN_STATUS + " INTEGER NOT NULL, " +
+                BurgerDeliveryContract.OrderEntry.COLUMN_SERVER_ID + " INTEGER NULL, " +
                 BurgerDeliveryContract.OrderEntry.COLUMN_DATE + " INTEGER NOT NULL);";
 
         db.execSQL(CREATE_TABLE_ORDER);
