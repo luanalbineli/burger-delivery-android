@@ -11,11 +11,7 @@ public class BitFlag {
     }
 
     public void set(int flag) {
-        flags = (flags | (1 << flag));
-    }
-
-    public void unSet(int flag) {
-        flags = (flags & ~(1 << flag));
+        flags = (flags | flag);
     }
 
     public boolean isSet(int flag) {

@@ -13,6 +13,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.security.InvalidParameterException;
+import java.util.Arrays;
+
+import timber.log.Timber;
 
 
 public class BurgerProvider extends ContentProvider {
@@ -124,14 +127,16 @@ public class BurgerProvider extends ContentProvider {
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String where, @Nullable String[] selectionArgs) {
         switch (URI_MATCHER.match(uri)) {
             case CODE_ORDER:
+                Timber.d("Updating the order.\nWHERE: " + where + "\nselectionArgs: " + formatSelectionArgs(selectionArgs) + formatContentValues(contentValues));
                 final Context context = getContext();
                 if (context == null) {
                     return 0;
                 }
 
                 final SQLiteDatabase sqLiteDatabase = mMovieDatabase.getWritableDatabase();
-                final int count = sqLiteDatabase.update(BurgerDeliveryContract.OrderItemEntry.TABLE_NAME, contentValues, where, selectionArgs);
+                final int count = sqLiteDatabase.update(BurgerDeliveryContract.OrderEntry.TABLE_NAME, contentValues, where, selectionArgs);
                 if (count == 0) {
+                    Timber.e("An error occurred while tried to updated the order (0 order updated)");
                     throw new SQLException("Failed to update the order " + uri);
                 }
 
@@ -142,6 +147,25 @@ public class BurgerProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
+    }
+
+    private String formatContentValues(ContentValues contentValues) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String key: contentValues.keySet()) {
+            stringBuilder.append("\nKEY: ")
+                    .append(key)
+                    .append(" | VALUE: ")
+                    .append(contentValues.get(key));
+        }
+        return stringBuilder.toString();
+    }
+
+    private String formatSelectionArgs(String[] selectionArgs) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String content: selectionArgs) {
+            stringBuilder.append(content);
+        }
+        return stringBuilder.toString();
     }
 
     private @Nullable SQLiteDatabase getWritableDatabase() {

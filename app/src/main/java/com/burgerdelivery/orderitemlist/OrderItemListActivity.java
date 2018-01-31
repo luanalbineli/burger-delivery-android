@@ -90,10 +90,15 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                closeScreen();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void closeScreen() {
+        NavUtils.navigateUpFromSameTask(this);
     }
 
     @Override

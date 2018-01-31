@@ -46,10 +46,10 @@ public class FirebaseMessagingEvent extends FirebaseMessagingService {
 
         Timber.i("Notification: " + remoteMessage.getNotification());
         Timber.i("Received an update order status message - Status: " + status + " | Server Id: " + serverId);
-/*        mBurgerRepository.updateOrderStatusByServerId(serverId, status)
+        mBurgerRepository.updateOrderStatusByServerId(serverId, status)
                 .subscribe(() -> Timber.i("Updated the order " + serverId + " to the status: " + status),
                         throwable -> Timber.e(throwable, "An error occurred while tried to update the order " + serverId + " to the status: " + status)
-                );*/
+                );
     }
 
     private static final String KEY_SERVER_ID = "id";

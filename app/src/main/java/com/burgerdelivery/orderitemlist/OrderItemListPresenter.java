@@ -4,12 +4,16 @@ import android.support.annotation.Nullable;
 
 import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.model.OrderItemModel;
+import com.burgerdelivery.model.response.FinishOrderResponseModel;
 import com.burgerdelivery.model.viewmodel.OrderItemListViewModel;
 
 import com.burgerdelivery.repository.BurgerRepository;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
+import io.reactivex.SingleSource;
+import io.reactivex.functions.Function;
 import timber.log.Timber;
 
 public class OrderItemListPresenter implements OrderItemListContract.Presenter {
@@ -99,11 +103,18 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
 
     @Override
     public void finishOrder() {
+
         mBurgerRepository.finishOrder(mOrderModel)
+                .flatMap((Function<FinishOrderResponseModel, SingleSource<?>>) finishOrderResponseModel -> {
+                    Timber.i("Updating the order: " + mOrderModel.getId() + " to the server id: " + finishOrderResponseModel.getId());
+                    return mBurgerRepository.updateSentOrderById(mOrderModel.getId(), finishOrderResponseModel.getId()).toSingleDefault(1);
+                })
                 .doOnSubscribe(disposable -> mView.showFinishingOrderLoadingIndicator())
                 .doAfterTerminate(mView::hideFinishingOrderLoadingIndicator)
-                .subscribe(finishOrderResponseModel ->
-                        mBurgerRepository.updateSentOrderById(mOrderModel.getId(), finishOrderResponseModel.getId()),
+                .subscribe(finishOrderResponseModel -> {
+                            Timber.d("Finished the process of order creation");
+                            mView.closeScreen();
+                        },
                         mView::showErrorFinishingOrder
                 );
 

@@ -13,6 +13,8 @@ import java.util.List;
 
 interface OrderItemListContract {
     interface View {
+        void closeScreen();
+
         void fetchOrderItemListUsingLoader();
 
         void showErrorLoadingOrder();

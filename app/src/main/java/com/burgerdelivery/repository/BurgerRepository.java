@@ -15,6 +15,7 @@ import com.burgerdelivery.repository.contentprovider.BurgerDeliveryContract;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.sql.SQLDataException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,6 +136,7 @@ public class BurgerRepository {
     }
 
     public Completable updateSentOrderById(int orderId, int serverId) {
+        Timber.d("Updating the order " + orderId + " to serverId: " + serverId + " and status SENT.");
         ContentValues contentValues = new ContentValues();
         contentValues.put(BurgerDeliveryContract.OrderEntry.COLUMN_STATUS, OrderStatus.SENT);
         contentValues.put(BurgerDeliveryContract.OrderEntry.COLUMN_SERVER_ID, serverId);
@@ -143,8 +145,14 @@ public class BurgerRepository {
             ContentResolver contentResolver = mBurgerDeliveryApplication.getContentResolver();
             String where = BurgerDeliveryContract.OrderEntry._ID + " = ?";
             String[] selectionArgs = new String[] { String.valueOf(orderId) };
-            contentResolver.update(BurgerDeliveryContract.OrderEntry.CONTENT_URI, contentValues, where, selectionArgs);
+            int numberOfUpdatedItems = contentResolver.update(BurgerDeliveryContract.OrderEntry.CONTENT_URI, contentValues, where, selectionArgs);
+            if (numberOfUpdatedItems <= 0) {
+                Timber.e("Error updating the order " + orderId + " to serverId: " + serverId + " and status SENT. THE ORDER WAS NOT FOUND (0 items updated).");
+                emitter.onError(new SQLException("An error occurred while tried to update the order: " + orderId + ". No order was updated by this id."));
+                return;
+            }
 
+            Timber.d("Successfully updated the order " + orderId + " to serverId: " + serverId + " and status SENT.");
             emitter.onComplete();
         }));
     }
