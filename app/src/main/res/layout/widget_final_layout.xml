@@ -1,26 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <ListView
-        android:id="@+id/lvWidgetItemList"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="0dp" />
+        android:layout_height="match_parent"
+        android:background="?android:colorBackground"
+        android:id="@+id/llWidgetOrderDetailContainer"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/lvWidgetItemList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            style="@style/ThinSmallText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="4dp"
+            android:text="@string/the_current_status_of_last_undelivered_order_is" />
+
+        <TextView
+            android:id="@+id/tvWidgetOrderStatus"
+            style="@style/LightMediumTextBold"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp" />
+    </LinearLayout>
 
     <TextView
+        android:text="@string/error_empty_order_widget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        style="@style/ThinSmallText"
-        android:text="@string/the_current_status_of_last_undelivered_order_is" />
-
-    <TextView
-        android:id="@+id/tvWidgetOrderStatus"
-        android:layout_width="match_parent"
-        style="@style/LightMediumText"
-        android:layout_margin="4dp"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_gravity="center"
+        android:id="@+id/tvWidgetEmptyOrder"
+        style="@style/LightMediumTextBold"
+        android:gravity="center" />
+</FrameLayout>

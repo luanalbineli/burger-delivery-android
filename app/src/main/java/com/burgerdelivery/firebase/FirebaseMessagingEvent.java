@@ -3,6 +3,7 @@ package com.burgerdelivery.firebase;
 import com.burgerdelivery.BurgerDeliveryApplication;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
 import com.burgerdelivery.repository.BurgerRepository;
+import com.burgerdelivery.widget.OrderShortcutWidgetProvider;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -50,6 +51,8 @@ public class FirebaseMessagingEvent extends FirebaseMessagingService {
                 .subscribe(() -> Timber.i("Updated the order " + serverId + " to the status: " + status),
                         throwable -> Timber.e(throwable, "An error occurred while tried to update the order " + serverId + " to the status: " + status)
                 );
+
+        OrderShortcutWidgetProvider.sendBroadcastToUpdateTheWidgets(this);
     }
 
     private static final String KEY_SERVER_ID = "id";

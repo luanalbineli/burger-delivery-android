@@ -47,4 +47,10 @@
     <!-- FCM notification channel -->
     <string name="default_notification_channel_id" translatable="false">fcm_burger_channel</string>
     <string name="default_notification_channel_name" translatable="true">Order updates</string>
+    <string name="pending">Pending</string>
+    <string name="preparing">Preparing</string>
+    <string name="sent">Sent</string>
+    <string name="order_status_delivered">Delivered</string>
+    <string name="order_status_in_route">In Route</string>
+    <string name="error_empty_order_widget">There is no order to show it\'s detail. Please, finish your order first.</string>
 </resources>

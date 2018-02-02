@@ -26,6 +26,7 @@ import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.model.viewmodel.OrderItemListViewModel;
 import com.burgerdelivery.repository.BurgerRepository;
 import com.burgerdelivery.repository.loader.OrderItemListLoader;
+import com.burgerdelivery.widget.OrderShortcutWidgetProvider;
 import com.ekalips.fancybuttonproj.FancyButton;
 
 import java.util.List;
@@ -239,6 +240,11 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
     public void showErrorFinishingOrder(Throwable throwable) {
         Timber.e(throwable, "An error occurred while tried to create the order");
         Toast.makeText(this, R.string.error_creating_order, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void updateWidgets() {
+        OrderShortcutWidgetProvider.sendBroadcastToUpdateTheWidgets(this);
     }
 
     @Override

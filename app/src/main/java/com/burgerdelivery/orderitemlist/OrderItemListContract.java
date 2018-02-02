@@ -52,6 +52,8 @@ interface OrderItemListContract {
         void hideFinishingOrderLoadingIndicator();
 
         void showErrorFinishingOrder(Throwable throwable);
+
+        void updateWidgets();
     }
 
     interface Presenter extends BasePresenter<View> {

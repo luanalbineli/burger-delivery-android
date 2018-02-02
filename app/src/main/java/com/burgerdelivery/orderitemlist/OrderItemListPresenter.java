@@ -113,6 +113,7 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
                 .doAfterTerminate(mView::hideFinishingOrderLoadingIndicator)
                 .subscribe(finishOrderResponseModel -> {
                             Timber.d("Finished the process of order creation");
+                            mView.updateWidgets();
                             mView.closeScreen();
                         },
                         mView::showErrorFinishingOrder

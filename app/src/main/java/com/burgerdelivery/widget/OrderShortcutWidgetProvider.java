@@ -2,7 +2,9 @@ package com.burgerdelivery.widget;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 
 import com.burgerdelivery.BurgerDeliveryApplication;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
@@ -11,6 +13,8 @@ import com.burgerdelivery.repository.BurgerRepository;
 
 import javax.inject.Inject;
 
+import io.reactivex.functions.BiConsumer;
+import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
 
@@ -26,36 +30,32 @@ public class OrderShortcutWidgetProvider extends AppWidgetProvider {
                 .build()
                 .inject(this);
 
-        for (int widgetId : appWidgetIds) {
-            OrderModel orderModel = mBurgerRepository.getCurrentPendingOrder().blockingGet();
-            Timber.d("Checking if there is a recipe model for it: " + orderModel);
-            if (orderModel != null) { // TODO: Handle if the recipe was not found.
-                RecipeWidgetManager.bindLayout(appWidgetManager, context, widgetId, orderModel);
-            }
+        mBurgerRepository.getLastOrder()
+            .subscribe((orderModel) -> {
+                for (int widgetId : appWidgetIds) {
+                    RecipeWidgetManager.bindLayout(appWidgetManager, context, widgetId, orderModel);
+                }
+            }, throwable -> Timber.e(throwable, "An error occurred while tried to update the widgets. Number of widgets: " + appWidgetIds.length));
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (intent.getExtras() != null && intent.hasExtra(WIDGET_IDS_KEY)) {
+            int ids[] = intent.getExtras().getIntArray(WIDGET_IDS_KEY);
+            this.onUpdate(context, AppWidgetManager.getInstance(context), ids);
+        } else {
+            super.onReceive(context, intent);
         }
     }
 
-    @Override
-    public void onEnabled(Context context) {
-    }
+    private static final String WIDGET_IDS_KEY = "order_shortcut_widget_provider_ids";
 
-    @Override
-    public void onDisabled(Context context) {
-
-    }
-
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        super.onDeleted(context, appWidgetIds);
-        DaggerInjectorComponent.builder()
-                .applicationComponent(BurgerDeliveryApplication.getApplicationComponent(context))
-
-                .build()
-                .inject(this);
-
-        for (int widgetId : appWidgetIds) {
-            // TODO: REMOVE THE WIDGET INFO.
-            //mBurgerRepository.removeRecipeIdByWidgetId(widgetId);
-        }
+    public static void sendBroadcastToUpdateTheWidgets(Context context) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context, OrderShortcutWidgetProvider.class));
+        Intent updateIntent = new Intent();
+        updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        updateIntent.putExtra(WIDGET_IDS_KEY, ids);
+        context.sendBroadcast(updateIntent);
     }
 }

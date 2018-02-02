@@ -1,8 +1,10 @@
 package com.burgerdelivery.model;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 
+import com.burgerdelivery.R;
 import com.burgerdelivery.enunn.OrderStatus;
 import com.burgerdelivery.repository.contentprovider.BurgerDeliveryContract;
 import com.burgerdelivery.util.SQLUtil;
@@ -105,5 +107,29 @@ public class OrderModel {
 
     public void removeItemFromOrder(int position) {
         itemList.remove(position);
+    }
+
+    public CharSequence getStatusDescription(Context context) {
+        int statusStringResId = R.string.pending;
+        switch (status) {
+            case OrderStatus.SENT:
+                statusStringResId = R.string.sent;
+                break;
+            case OrderStatus.PREPARING:
+                statusStringResId = R.string.preparing;
+                break;
+            case OrderStatus.IN_ROUTE:
+                statusStringResId = R.string.order_status_in_route;
+                break;
+            case OrderStatus.DELIVERED:
+                statusStringResId = R.string.order_status_delivered;
+                break;
+        }
+
+        return context.getString(statusStringResId);
+    }
+
+    public void setOrderItemList(List<OrderItemModel> orderItemList) {
+        this.itemList = orderItemList;
     }
 }

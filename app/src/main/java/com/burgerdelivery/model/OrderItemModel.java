@@ -2,13 +2,15 @@ package com.burgerdelivery.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.burgerdelivery.enunn.AdditionalItemStatus;
 import com.burgerdelivery.repository.contentprovider.BurgerDeliveryContract;
 import com.burgerdelivery.util.BitFlag;
 import com.burgerdelivery.util.SQLUtil;
 
-public class OrderItemModel {
+public class OrderItemModel implements Parcelable {
     private final BurgerModel burgerModel;
     private final int orderId;
     private final int additional;
@@ -27,6 +29,15 @@ public class OrderItemModel {
     private OrderItemModel(int id, int orderId, int additional, String observation, int quantity, BurgerModel burgerModel) {
         this(orderId, additional, observation, quantity, burgerModel);
         this.id = id;
+    }
+
+    protected OrderItemModel(Parcel in) {
+        burgerModel = in.readParcelable(BurgerModel.class.getClassLoader());
+        orderId = in.readInt();
+        additional = in.readInt();
+        observation = in.readString();
+        quantity = in.readInt();
+        id = in.readInt();
     }
 
     public ContentValues getContentValues() {
@@ -112,4 +123,31 @@ public class OrderItemModel {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeParcelable(burgerModel, i);
+        parcel.writeInt(orderId);
+        parcel.writeInt(additional);
+        parcel.writeString(observation);
+        parcel.writeInt(quantity);
+        parcel.writeInt(id);
+    }
+
+    public static final Creator<OrderItemModel> CREATOR = new Creator<OrderItemModel>() {
+        @Override
+        public OrderItemModel createFromParcel(Parcel in) {
+            return new OrderItemModel(in);
+        }
+
+        @Override
+        public OrderItemModel[] newArray(int size) {
+            return new OrderItemModel[size];
+        }
+    };
 }

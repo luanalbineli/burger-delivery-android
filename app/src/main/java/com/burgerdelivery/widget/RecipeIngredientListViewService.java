@@ -3,6 +3,8 @@ package com.burgerdelivery.widget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -13,15 +15,25 @@ import com.burgerdelivery.model.OrderItemModel;
 import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.repository.BurgerRepository;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import timber.log.Timber;
 
 
 public class RecipeIngredientListViewService extends RemoteViewsService {
+    public static final String ORDER_ITEM_LIST_KEY = "order_item_list_key";
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new WidgetRemoteViewsFactory(this, intent);
+        List<OrderItemModel> orderItemList = null;
+        if (intent.getExtras() != null && intent.hasExtra(ORDER_ITEM_LIST_KEY)) {
+            Timber.d("Contains the item list");
+            Bundle bundle = intent.getBundleExtra(ORDER_ITEM_LIST_KEY);
+            orderItemList = bundle.getParcelableArrayList(ORDER_ITEM_LIST_KEY);
+        }
+
+        return new WidgetRemoteViewsFactory(this, intent, orderItemList);
     }
 
     public static class WidgetRemoteViewsFactory implements RemoteViewsFactory {
@@ -30,11 +42,12 @@ public class RecipeIngredientListViewService extends RemoteViewsService {
 
         @Inject
         BurgerRepository mRecipeRepository;
-        private OrderModel mOrderModel;
+        private @Nullable List<OrderItemModel> mOrderItemList;
 
-        WidgetRemoteViewsFactory(Context context, Intent intent) {
+        WidgetRemoteViewsFactory(Context context, Intent intent, @Nullable List<OrderItemModel> orderItemList) {
             mContext = context;
             mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            mOrderItemList = orderItemList;
             Timber.i("WidgetRemoteViewsFactory - WidgetId: " + mAppWidgetId);
         }
 
@@ -49,29 +62,27 @@ public class RecipeIngredientListViewService extends RemoteViewsService {
         }
 
         @Override
-        public void onDataSetChanged() {
-            mOrderModel = mRecipeRepository.getCurrentPendingOrder().blockingGet();
-            Timber.i("WidgetRemoteViewsFactory - recipe model: " + mOrderModel);
-        }
+        public void onDataSetChanged() { }
 
         @Override
-        public void onDestroy() {
-
-        }
+        public void onDestroy() { }
 
         @Override
         public int getCount() {
-            return mOrderModel.getItemList().size();
+            return mOrderItemList == null ? 0 : mOrderItemList.size();
         }
 
         @Override
         public RemoteViews getViewAt(int position) {
-            OrderItemModel orderItemModel = mOrderModel.getItemList().get(position);
             RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.widget_order_item);
+            if (mOrderItemList != null) {
+                OrderItemModel orderItemModel = mOrderItemList.get(position);
 
-            remoteViews.setTextViewText(R.id.tvWidgetOrderItemQuantity, String.valueOf(orderItemModel.getQuantity()));
+                remoteViews.setTextViewText(R.id.tvWidgetOrderItemQuantity, String.valueOf(orderItemModel.getQuantity()));
 
-            remoteViews.setTextViewText(R.id.tvWidgetOrderItemBurgerName, orderItemModel.getBurgerModel().getName());
+                remoteViews.setTextViewText(R.id.tvWidgetOrderItemBurgerName, orderItemModel.getBurgerModel().getName());
+            }
+
             return remoteViews;
         }
 
