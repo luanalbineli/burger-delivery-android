@@ -153,7 +153,7 @@ public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRec
 
     protected abstract void onBindItemViewHolder(THolder holder, int position);
 
-    @interface ViewType {
+    public @interface ViewType {
         int GRID_STATUS = 0;
         int ITEM = 1;
     }

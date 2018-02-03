@@ -12,7 +12,6 @@ import com.burgerdelivery.BurgerDeliveryApplication;
 import com.burgerdelivery.R;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
 import com.burgerdelivery.model.OrderItemModel;
-import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.repository.BurgerRepository;
 
 import java.util.List;
@@ -22,7 +21,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 
-public class RecipeIngredientListViewService extends RemoteViewsService {
+public class BurgerListViewService extends RemoteViewsService {
     public static final String ORDER_ITEM_LIST_KEY = "order_item_list_key";
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -33,7 +32,7 @@ public class RecipeIngredientListViewService extends RemoteViewsService {
             orderItemList = bundle.getParcelableArrayList(ORDER_ITEM_LIST_KEY);
         }
 
-        return new WidgetRemoteViewsFactory(this, intent, orderItemList);
+        return new WidgetRemoteViewsFactory(this.getApplicationContext(), intent, orderItemList);
     }
 
     public static class WidgetRemoteViewsFactory implements RemoteViewsFactory {
@@ -42,6 +41,7 @@ public class RecipeIngredientListViewService extends RemoteViewsService {
 
         @Inject
         BurgerRepository mRecipeRepository;
+
         private @Nullable List<OrderItemModel> mOrderItemList;
 
         WidgetRemoteViewsFactory(Context context, Intent intent, @Nullable List<OrderItemModel> orderItemList) {
@@ -62,7 +62,9 @@ public class RecipeIngredientListViewService extends RemoteViewsService {
         }
 
         @Override
-        public void onDataSetChanged() { }
+        public void onDataSetChanged() {
+            Timber.d("The DataSet has changed");
+        }
 
         @Override
         public void onDestroy() { }

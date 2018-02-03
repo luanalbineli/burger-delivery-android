@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+/*apply plugin: 'io.fabric'*/
 
 apply from: '../dependencies.gradle'
 apply from: '../configuration.gradle'
@@ -32,16 +33,20 @@ android {
 dependencies {
     def libs = [supportV7] + constraintLayout + recyclerView + design +
             gson + retrofit + timber + supportAnnotations + fresco +
-            fancyButton + rxJava + cardView + materialDialog + firebaseMessaging
-    implementation libs
+            fancyButton + rxJava + cardView + materialDialog +
+            /*firebaseCore +*/ firebaseMessaging + stetho
 
-    implementation stetho
+    implementation libs
 
     implementation dagger
     annotationProcessor daggerCompiler
 
     implementation butterKnife
     annotationProcessor butterKnifeCompiler
+
+    /*compile(crashlytics) {
+        transitive = true
+    }*/
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -1,11 +1,12 @@
 package com.burgerdelivery.firebase;
 
+import android.content.Intent;
+
 import com.burgerdelivery.BurgerDeliveryApplication;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
 import com.burgerdelivery.repository.BurgerRepository;
 import com.burgerdelivery.widget.OrderShortcutWidgetProvider;
 import com.google.firebase.messaging.FirebaseMessagingService;
-import com.google.firebase.messaging.RemoteMessage;
 
 import javax.inject.Inject;
 
@@ -27,6 +28,29 @@ public class FirebaseMessagingEvent extends FirebaseMessagingService {
     }
 
     @Override
+    public void handleIntent(Intent intent) {
+        super.handleIntent(intent);
+
+        if (!intent.hasExtra(KEY_SERVER_ID) || !intent.hasExtra(KEY_STATUS)) {
+            Timber.w("A message was received, but the data is incomplete: " +
+                    "\n\nremoteMessage.getData().containsKey(KEY_SERVER_ID): " + intent.hasExtra(KEY_SERVER_ID) +
+                    "\n\nremoteMessage.getData().containsKey(KEY_STATUS): " + intent.hasExtra(KEY_STATUS));
+            return;
+        }
+
+        int serverId = Integer.parseInt(intent.getStringExtra(KEY_SERVER_ID));
+        int status = Integer.parseInt(intent.getStringExtra(KEY_STATUS));
+
+        Timber.i("Received an update order status message - Status: " + status + " | Server Id: " + serverId);
+        mBurgerRepository.updateOrderStatusByServerId(serverId, status)
+                .subscribe(() -> Timber.i("Updated the order " + serverId + " to the status: " + status),
+                        throwable -> Timber.e(throwable, "An error occurred while tried to update the order " + serverId + " to the status: " + status)
+                );
+
+        OrderShortcutWidgetProvider.sendBroadcastToUpdateTheWidgets(this);
+    }
+
+    /*@Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Timber.i("From: " + remoteMessage.getFrom());
 
@@ -53,7 +77,7 @@ public class FirebaseMessagingEvent extends FirebaseMessagingService {
                 );
 
         OrderShortcutWidgetProvider.sendBroadcastToUpdateTheWidgets(this);
-    }
+    }*/
 
     private static final String KEY_SERVER_ID = "id";
     private static final String KEY_STATUS = "status";

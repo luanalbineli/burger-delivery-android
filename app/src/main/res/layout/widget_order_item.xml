@@ -11,7 +11,7 @@
         android:layout_width="24dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/the_current_status_of_last_undelivered_order_is" />
+        android:text="@string/the_current_status_of_last_order_is" />
 
     <TextView
         android:id="@+id/tvWidgetOrderItemBurgerName"

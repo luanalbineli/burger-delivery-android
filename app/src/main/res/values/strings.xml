@@ -24,7 +24,7 @@
     <string name="successfully_created_order_item">Successfully created the order item</string>
     <string name="remove">Remove</string>
     <string name="contentDescriptionDeleteOrderItem">Image button used to remove an item from the order</string>
-    <string name="the_current_status_of_last_undelivered_order_is">The current status of your last undelivered order is:</string>
+    <string name="the_current_status_of_last_order_is">The current status of your last order is:</string>
     <string name="order_detail">Order detail</string>
     <string name="finish_order">Finish order</string>
     <string name="total">Total</string>
@@ -45,7 +45,7 @@
 
 
     <!-- FCM notification channel -->
-    <string name="default_notification_channel_id" translatable="false">fcm_burger_channel</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_order_status_update_channel</string>
     <string name="default_notification_channel_name" translatable="true">Order updates</string>
     <string name="pending">Pending</string>
     <string name="preparing">Preparing</string>

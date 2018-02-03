@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-abstract class RecipeWidgetManager {
-    static void bindLayout(AppWidgetManager appWidgetManager, Context context, int widgetId, OrderModel orderModel) {
-        Timber.d("Binding the layout for the widget id: " + widgetId);
+abstract class BurgerDeliveryWidgetManager {
+    static void bindLayout(AppWidgetManager appWidgetManager, Context context, int[] widgetIds, OrderModel orderModel) {
+        Timber.d("Binding the layout for the widget ids. Size: " + widgetIds.length);
         Timber.d("OrderModel: " + orderModel);
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_final_layout);
@@ -29,16 +29,16 @@ abstract class RecipeWidgetManager {
 
             views.setTextViewText(R.id.tvWidgetOrderStatus, orderModel.getStatusDescription(context));
 
-            Intent intentAdapter = new Intent(context, RecipeIngredientListViewService.class);
+            Intent intentAdapter = new Intent(context, BurgerListViewService.class);
 
             Bundle bundle = new Bundle(1);
-            bundle.putParcelableArrayList(RecipeIngredientListViewService.ORDER_ITEM_LIST_KEY, new ArrayList<>(orderModel.getItemList()));
-            intentAdapter.putExtra(RecipeIngredientListViewService.ORDER_ITEM_LIST_KEY, bundle);
-            intentAdapter.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+            bundle.putParcelableArrayList(BurgerListViewService.ORDER_ITEM_LIST_KEY, new ArrayList<>(orderModel.getItemList()));
+            intentAdapter.putExtra(BurgerListViewService.ORDER_ITEM_LIST_KEY, bundle);
+            intentAdapter.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetIds);
             views.setRemoteAdapter(R.id.lvWidgetItemList, intentAdapter);
-            Timber.d("Bundled the item list");
+            Timber.d("Bundled the item list. Number of items: " + orderModel.getItemList().size());
 
-            appWidgetManager.updateAppWidget(widgetId, views);
+            appWidgetManager.updateAppWidget(widgetIds, views);
         }
     }
 }

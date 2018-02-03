@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class OrderModel {
     public static final OrderModel EMPTY = new OrderModel(Integer.MIN_VALUE);
 
@@ -126,7 +128,10 @@ public class OrderModel {
                 break;
         }
 
-        return context.getString(statusStringResId);
+        String statusDescription = context.getString(statusStringResId);
+        Timber.d("Status description: " + statusDescription);
+
+        return statusDescription;
     }
 
     public void setOrderItemList(List<OrderItemModel> orderItemList) {

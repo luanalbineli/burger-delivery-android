@@ -15,7 +15,9 @@ ext {
             fresco                  : '1.5.0',
             stetho                  : '1.5.0',
             materialDialog          : '0.9.3.0',
-            firebaseMessaging       : '11.8.0'
+            firebaseMessaging       : '10.2.1',
+            firebaseCore            : '11.8.0',
+            crashlytics             : '2.7.1@aar'
     ]
 
     supportV13 = "com.android.support:support-v13:$versions.support"
@@ -64,4 +66,9 @@ ext {
     butterKnifeCompiler = "com.jakewharton:butterknife-compiler:$versions.butterKnife"
 
     firebaseMessaging = "com.google.firebase:firebase-messaging:$versions.firebaseMessaging"
+
+    crashlytics = "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics"
+
+    firebaseCore = "com.google.firebase:firebase-core:$versions.firebaseCore"
+
 }

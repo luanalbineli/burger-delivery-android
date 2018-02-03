@@ -75,6 +75,8 @@ public class OrderItemListActivity extends BaseActivity<OrderItemListContract.Vi
         mFinishOrderButton.setOnClickListener(view -> mPresenter.finishOrder());
 
         mPresenter.start(new OrderItemListViewModel());
+
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     private void configureRecyclerView() {

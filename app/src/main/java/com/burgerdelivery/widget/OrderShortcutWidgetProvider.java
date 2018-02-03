@@ -8,13 +8,10 @@ import android.content.Intent;
 
 import com.burgerdelivery.BurgerDeliveryApplication;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
-import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.repository.BurgerRepository;
 
 import javax.inject.Inject;
 
-import io.reactivex.functions.BiConsumer;
-import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
 
@@ -31,11 +28,10 @@ public class OrderShortcutWidgetProvider extends AppWidgetProvider {
                 .inject(this);
 
         mBurgerRepository.getLastOrder()
-            .subscribe((orderModel) -> {
-                for (int widgetId : appWidgetIds) {
-                    RecipeWidgetManager.bindLayout(appWidgetManager, context, widgetId, orderModel);
-                }
-            }, throwable -> Timber.e(throwable, "An error occurred while tried to update the widgets. Number of widgets: " + appWidgetIds.length));
+            .subscribe(
+                    (orderModel) -> BurgerDeliveryWidgetManager.bindLayout(appWidgetManager, context, appWidgetIds, orderModel),
+                    throwable -> Timber.e(throwable, "An error occurred while tried to update the widgets. Number of widgets: " + appWidgetIds.length)
+            );
     }
 
     @Override

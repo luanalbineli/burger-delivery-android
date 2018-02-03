@@ -6,6 +6,7 @@ import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,10 +19,9 @@ import com.burgerdelivery.base.BasePresenter;
 import com.burgerdelivery.burgerdetail.BurgerDetailFragment;
 import com.burgerdelivery.dagger.component.ApplicationComponent;
 import com.burgerdelivery.dagger.component.DaggerInjectorComponent;
-import com.burgerdelivery.repository.loader.BurgerListLoader;
 import com.burgerdelivery.model.BurgerModel;
 import com.burgerdelivery.model.viewmodel.BurgerListViewModel;
-import com.burgerdelivery.ui.RequestStatusView;
+import com.burgerdelivery.repository.loader.BurgerListLoader;
 import com.burgerdelivery.ui.recyclerview.CustomRecyclerViewAdapter;
 
 import java.util.List;
@@ -65,28 +65,46 @@ public class BurgerListFragment extends BaseFragment<BurgerListContract.View> im
     }
 
     private void configureRecyclerView() {
+        mListRecyclerView.setHasFixedSize(true);
+
+        mAdapter = new BurgerListAdapter(R.string.item_order_list_is_empty, () -> mPresenter.tryToFetchBurgerListAgain());
+
+        mAdapter.setOnItemClickListener((position, burgerModel) -> mPresenter.handleBurgerItemClick(burgerModel));
+
+        mListRecyclerView.setAdapter(mAdapter);
+
+        if (getActivity().getResources().getBoolean(R.bool.isTablet)) {
+            configureTabletLayout();
+        } else {
+            useLinearLayoutManager();
+        }
+    }
+
+    private void useLinearLayoutManager() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mListRecyclerView.setLayoutManager(linearLayoutManager);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
         mListRecyclerView.addItemDecoration(dividerItemDecoration);
-
-        mAdapter = new BurgerListAdapter(R.string.item_order_list_is_empty, new RequestStatusView.ITryAgainListener() {
-            @Override
-            public void tryAgain() {
-                mPresenter.tryToFetchBurgerListAgain();
-            }
-        });
-
-        mAdapter.setOnItemClickListener(new CustomRecyclerViewAdapter.IItemClickListener<BurgerModel>() {
-            @Override
-            public void click(int position, BurgerModel burgerModel) {
-                mPresenter.handleBurgerItemClick(burgerModel);
-            }
-        });
-
-        mListRecyclerView.setAdapter(mAdapter);
     }
+
+    private void configureTabletLayout() {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), NUMBER_OF_COLUMNS_TABLET, GridLayoutManager.VERTICAL, false);
+        mListRecyclerView.setLayoutManager(gridLayoutManager);
+
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                switch (mAdapter.getItemViewType(position)) {
+                    case CustomRecyclerViewAdapter.ViewType.ITEM:
+                        return 1;
+                    default: // Grid status.
+                        return gridLayoutManager.getSpanCount();
+                }
+            }
+        });
+    }
+
 
     @Override
     public void fetchBurgerListUsingLoader() {
@@ -171,4 +189,6 @@ public class BurgerListFragment extends BaseFragment<BurgerListContract.View> im
     }
 
     private static final int TASK_ID = 103;
+
+    private static final int NUMBER_OF_COLUMNS_TABLET = 2;
 }

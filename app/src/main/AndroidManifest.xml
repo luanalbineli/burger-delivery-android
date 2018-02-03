@@ -48,7 +48,7 @@
         </receiver>
 
         <service
-            android:name=".widget.RecipeIngredientListViewService"
+            android:name=".widget.BurgerListViewService"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
@@ -69,11 +69,15 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/food_fork_drink" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="fda062f6a58cc38f8a92726ebd57b3b025584c72"
+            />
     </application>
 
 </manifest>
