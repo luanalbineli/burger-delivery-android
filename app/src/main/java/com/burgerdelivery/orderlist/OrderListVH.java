@@ -2,7 +2,7 @@ package com.burgerdelivery.orderlist;
 
 import android.view.View;
 
-import com.burgerdelivery.model.OrderItemModel;
+import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.ui.recyclerview.CustomRecyclerViewHolder;
 
 import butterknife.ButterKnife;
@@ -15,7 +15,7 @@ class OrderListVH extends CustomRecyclerViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    void bind(OrderItemModel orderItemModel) {
+    void bind(OrderModel orderModel) {
 
     }
 }

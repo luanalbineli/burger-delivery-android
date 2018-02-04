@@ -52,4 +52,6 @@
     <string name="order_status_in_route">In Route</string>
     <string name="error_empty_order_widget">There is no order to show it\'s detail. Please, finish your order first.</string>
     <string name="historic_order">Order historic</string>
+    <string name="order_list">Historic order list</string>
+    <string name="the_historic_order_list_is_empty">The historic order list is empty</string>
 </resources>

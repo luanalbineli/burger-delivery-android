@@ -1,11 +1,8 @@
 package com.burgerdelivery.orderlist;
 
-import android.support.annotation.Nullable;
-
 import com.burgerdelivery.base.BasePresenter;
-import com.burgerdelivery.model.OrderItemModel;
 import com.burgerdelivery.model.OrderModel;
-import com.burgerdelivery.model.viewmodel.OrderItemListViewModel;
+import com.burgerdelivery.model.viewmodel.HistoricOrderListViewModel;
 
 import java.util.List;
 
@@ -13,60 +10,26 @@ interface OrderListContract {
     interface View {
         void closeScreen();
 
-        void fetchOrderItemListUsingLoader();
+        void fetchHistoricOrderItemListUsingLoader();
 
-        void showErrorLoadingOrder();
+        void showErrorLoadingHistoricOrderList();
 
-        void tryToFetchBurgerListUsingLoaderAgain();
+        void tryToFetchHistoricOrderListUsingLoaderAgain();
 
-        void showOrderItemList(List<OrderItemModel> data);
+        void showOrderItemList(List<OrderModel> orderList);
 
         void showLoadingIndicator();
 
         void hideLoadingIndicator();
 
-        void showNoPendingOrderMessage();
-
-        void disableFinishOrderButton();
-
-        void updateOrderTotalValue(float total);
-
-        void showConfirmationToRemoveOrderItem(int position);
-
-        void showRemovingItemLoadingIndicator();
-
-        void showMessageItemRemovedWithSuccess();
-
-        void hideRemovingItemLoadingIndicator();
-
-        void removeOrderItemFromList(int position);
-
-        void showErrorRemovingOrderItem(Throwable throwable);
-
-        void updateOrderItemByPosition(int position);
-
-        void showFinishingOrderLoadingIndicator();
-
-        void hideFinishingOrderLoadingIndicator();
-
-        void showErrorFinishingOrder(Throwable throwable);
-
-        void updateWidgets();
+        void showHistoricOrderListEmptyMessage();
     }
 
     interface Presenter extends BasePresenter<View> {
-        void onPendingOrderFetched(@Nullable OrderModel orderModel);
+        void onHistoricOrderListFetched(List<OrderModel> orderList);
 
-        void start(OrderItemListViewModel orderItemListViewModel);
+        void start(HistoricOrderListViewModel historicOrderListViewModel);
 
-        void tryToFetchBurgerListAgain();
-
-        void onRemoveItem(int position);
-
-        void removeItemConfirmed(int position);
-
-        void onChangeOrderItemQuantity(int position, int value);
-
-        void finishOrder();
+        void tryToFetchHistoricOrderListAgain();
     }
 }

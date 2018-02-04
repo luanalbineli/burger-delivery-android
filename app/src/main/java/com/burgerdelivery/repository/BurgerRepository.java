@@ -209,4 +209,27 @@ public class BurgerRepository {
 
         return orderItemList;
     }
+
+    public Single<List<OrderModel>> getHistoricOrderList() {
+        return observeOnMainThread(Single.create((SingleOnSubscribe<List<OrderModel>>) singleEmitter -> {
+            ContentResolver contentResolver = mBurgerDeliveryApplication.getContentResolver();
+            String selection = BurgerDeliveryContract.OrderEntry.COLUMN_STATUS + " != ?";
+            String[] selectionArgs = new String[]{String.valueOf(OrderStatus.PENDING)};
+
+            Cursor cursor = contentResolver.query(BurgerDeliveryContract.OrderEntry.CONTENT_URI, null, selection, selectionArgs, null);
+            if (cursor == null) {
+                singleEmitter.onError(new SQLDataException("An internal error occurred"));
+                return;
+            }
+
+            List<OrderModel> orderList = new ArrayList<>(cursor.getCount());
+            while (cursor.moveToNext()) {
+                OrderModel orderModel = OrderModel.fromCursor(cursor);
+                orderModel.setOrderItemList(getItemsByOrderId(contentResolver, orderModel.getId()));
+                orderList.add(orderModel);
+            }
+
+            singleEmitter.onSuccess(orderList);
+        }));
+    }
 }
