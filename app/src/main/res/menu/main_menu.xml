@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_historic_order"
+        android:icon="@drawable/playlist_check"
+        android:title="@string/historic_order"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/menu_cart"
         android:icon="@drawable/cart"
         android:title="@string/cart"

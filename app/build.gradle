@@ -5,6 +5,14 @@ apply from: '../dependencies.gradle'
 apply from: '../configuration.gradle'
 
 android {
+    signingConfigs {
+        release_signig_config {
+            keyAlias 'key0'
+            keyPassword 'key_alias_password'
+            storeFile file('../keystore/burger_delivery_keystore.keystore')
+            storePassword 'burger_delivery'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.burgerdelivery"
@@ -16,14 +24,13 @@ android {
 
         vectorDrawables.useSupportLibrary = true
     }
-
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release_signig_config
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -34,19 +41,15 @@ dependencies {
     def libs = [supportV7] + constraintLayout + recyclerView + design +
             gson + retrofit + timber + supportAnnotations + fresco +
             fancyButton + rxJava + cardView + materialDialog +
-            /*firebaseCore +*/ firebaseMessaging + stetho
-
+            /*firebaseCore +*/firebaseMessaging + stetho
     implementation libs
-
     implementation dagger
     annotationProcessor daggerCompiler
-
     implementation butterKnife
     annotationProcessor butterKnifeCompiler
-
     /*compile(crashlytics) {
-        transitive = true
-    }*/
+                transitive = true
+            }*/
 }
 
 apply plugin: 'com.google.gms.google-services'
