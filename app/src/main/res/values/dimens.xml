@@ -9,4 +9,6 @@
 
     <!-- Burger detail -->
     <integer name="observation_max_length">240</integer>
+
+    <bool name="isTablet">false</bool>
 </resources>

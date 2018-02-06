@@ -4,8 +4,8 @@ import com.burgerdelivery.burgerdetail.BurgerDetailFragment;
 import com.burgerdelivery.dagger.PerFragment;
 import com.burgerdelivery.burgerlist.BurgerListFragment;
 import com.burgerdelivery.firebase.FirebaseMessagingEvent;
+import com.burgerdelivery.orderhistoriclist.OrderHistoricListActivity;
 import com.burgerdelivery.orderitemlist.OrderItemListActivity;
-import com.burgerdelivery.orderlist.OrderListActivity;
 import com.burgerdelivery.widget.BurgerListViewService;
 import com.burgerdelivery.widget.OrderShortcutWidgetProvider;
 
@@ -26,5 +26,5 @@ public interface InjectorComponent {
 
     void inject(FirebaseMessagingEvent firebaseMessagingEvent);
 
-    void inject(OrderListActivity orderListActivity);
+    void inject(OrderHistoricListActivity orderListActivity);
 }

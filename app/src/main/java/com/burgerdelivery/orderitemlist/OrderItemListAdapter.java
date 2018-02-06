@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.burgerdelivery.R;
-import com.burgerdelivery.model.BurgerModel;
 import com.burgerdelivery.model.OrderItemModel;
 import com.burgerdelivery.ui.RequestStatusView;
 import com.burgerdelivery.ui.recyclerview.CustomRecyclerViewAdapter;

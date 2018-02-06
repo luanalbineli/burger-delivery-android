@@ -1,4 +1,4 @@
-package com.burgerdelivery.orderlist;
+package com.burgerdelivery.orderhistoriclist;
 
 import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.model.viewmodel.HistoricOrderListViewModel;
@@ -9,16 +9,16 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class OrderListPresenter implements OrderListContract.Presenter {
-    private OrderListContract.View mView;
+public class OrderHistoricListPresenter implements OrderHistoricListContract.Presenter {
+    private OrderHistoricListContract.View mView;
 
     private HistoricOrderListViewModel mHistoricOrderListViewModel;
 
     @Inject
-    OrderListPresenter() { }
+    OrderHistoricListPresenter() { }
 
     @Override
-    public void setView(OrderListContract.View view) {
+    public void setView(OrderHistoricListContract.View view) {
         mView = view;
     }
 
@@ -26,7 +26,7 @@ public class OrderListPresenter implements OrderListContract.Presenter {
     public void onHistoricOrderListFetched(List<OrderModel> orderList) {
         mHistoricOrderListViewModel.orderList = orderList;
         if (orderList.size() == 0) {
-            mView.showErrorLoadingHistoricOrderList();
+            mView.showHistoricOrderListEmptyMessage();
         } else {
             mView.showOrderItemList(orderList);
         }

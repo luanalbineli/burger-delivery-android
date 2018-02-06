@@ -55,6 +55,6 @@ public class ApplicationModule {
         return new BurgerListLoader(mApplication, retrofit);
     }
 
-    private static final String BASE_URL = "http://192.168.86.12:9090/api/";
-    //private static final String BASE_URL = "http://10.0.2.2:9090/api/";
+    //private static final String BASE_URL = "http://192.168.86.12:9090/api/";
+    private static final String BASE_URL = "http://10.0.2.2:9090/api/";
 }

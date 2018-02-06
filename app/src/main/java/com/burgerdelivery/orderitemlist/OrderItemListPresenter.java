@@ -103,7 +103,6 @@ public class OrderItemListPresenter implements OrderItemListContract.Presenter {
 
     @Override
     public void finishOrder() {
-
         mBurgerRepository.finishOrder(mOrderModel)
                 .flatMap((Function<FinishOrderResponseModel, SingleSource<?>>) finishOrderResponseModel -> {
                     Timber.i("Updating the order: " + mOrderModel.getId() + " to the server id: " + finishOrderResponseModel.getId());

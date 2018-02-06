@@ -12,6 +12,7 @@ import com.burgerdelivery.model.OrderItemModel;
 import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.model.request.OrderRequestModel;
 import com.burgerdelivery.model.response.FinishOrderResponseModel;
+import com.burgerdelivery.model.response.OrderStatusUpdateModel;
 import com.burgerdelivery.repository.contentprovider.BurgerDeliveryContract;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -231,5 +232,9 @@ public class BurgerRepository {
 
             singleEmitter.onSuccess(orderList);
         }));
+    }
+
+    public Single<List<OrderStatusUpdateModel>> updateOrderListStatus(List<Integer> ordersId) {
+        return observeOnMainThread(mRetrofit.create(APIInterface.class).updateOrderStatus(ordersId));
     }
 }

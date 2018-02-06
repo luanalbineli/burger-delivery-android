@@ -38,7 +38,7 @@ public abstract class BurgerDeliveryContract {
                 .appendPath(PATH_ITEM)
                 .build();
 
-        static final String TABLE_NAME = "order_item";
+        static final String TABLE_NAME = "order_historic_item";
 
         public static final String COLUMN_BURGER_ID = "burgerId";
 

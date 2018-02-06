@@ -3,6 +3,7 @@ package com.burgerdelivery.repository;
 import com.burgerdelivery.model.BurgerModel;
 import com.burgerdelivery.model.request.OrderRequestModel;
 import com.burgerdelivery.model.response.FinishOrderResponseModel;
+import com.burgerdelivery.model.response.OrderStatusUpdateModel;
 
 import java.util.List;
 
@@ -18,4 +19,7 @@ public interface APIInterface {
 
     @POST("order")
     Single<FinishOrderResponseModel> finishOrder(@Body OrderRequestModel orderRequestModel);
+
+    @POST("order/status")
+    Single<List<OrderStatusUpdateModel>> updateOrderStatus(@Body List<Integer> ordersId);
 }

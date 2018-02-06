@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:layout_marginTop="16dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/sdvOrderItemBurgerImage"
+            android:layout_width="@dimen/burger_item_image_size"
+            android:layout_height="@dimen/burger_item_image_size"
+            app:actualImageScaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvOrderItemBurgerName"
+            app:placeholderImage="@android:color/darker_gray"
+            app:roundedCornerRadius="5dp" />
+
+        <TextView
+            android:id="@+id/tvOrderItemBurgerName"
+            style="@style/LightMediumText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintEnd_toStartOf="@+id/ivOrderItemRemove"
+            app:layout_constraintStart_toEndOf="@+id/sdvOrderItemBurgerImage"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="This is the burger name" />
+
+        <ImageView
+            android:id="@+id/ivOrderItemRemove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/contentDescriptionDeleteOrderItem"
+            app:layout_constraintBottom_toBottomOf="@+id/tvOrderItemBurgerName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvOrderItemBurgerName"
+            app:srcCompat="@drawable/delete" />
+
+        <ImageView
+            android:id="@+id/ivOrderItemQuantityAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/contentDescriptionDeleteOrderItem"
+            app:layout_constraintBottom_toBottomOf="@+id/sdvOrderItemBurgerImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/plus_circle_outline" />
+
+        <TextView
+            android:id="@+id/tvOrderItemQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:ems="3"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="@+id/ivOrderItemQuantityAdd"
+            app:layout_constraintEnd_toStartOf="@+id/ivOrderItemQuantityAdd"
+            app:layout_constraintTop_toTopOf="@+id/ivOrderItemQuantityAdd"
+            tools:text="12" />
+
+        <ImageView
+            android:id="@+id/ivOrderItemQuantityRemove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/contentDescriptionDeleteOrderItem"
+            app:layout_constraintBottom_toBottomOf="@+id/tvOrderItemQuantity"
+            app:layout_constraintEnd_toStartOf="@+id/tvOrderItemQuantity"
+            app:layout_constraintTop_toTopOf="@+id/tvOrderItemQuantity"
+            app:srcCompat="@drawable/minus_circle_outline" />
+
+        <TextView
+            android:id="@+id/labelAdditional"
+            style="@style/ThinSmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/additional"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sdvOrderItemBurgerImage" />
+
+        <TextView
+            android:id="@+id/tvOrderItemAdditional"
+            style="@style/ThinSmallText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/labelAdditional"
+            tools:text="Pickles" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/content_divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvOrderItemAdditional" />
+
+        <TextView
+            style="@style/ThinSmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/subtotal"
+            app:layout_constraintBottom_toBottomOf="@+id/tvOrderItemSubtotalValue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvOrderItemSubtotalValue" />
+
+        <TextView
+            android:id="@+id/tvOrderItemSubtotalValue"
+            style="@style/LightMediumText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider"
+            tools:text="$ 37" />
+
+        <TextView
+            style="@style/ThinSmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/additional_with_colon"
+            app:layout_constraintBottom_toBottomOf="@+id/tvOrderItemAdditionalValue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvOrderItemAdditionalValue" />
+
+        <TextView
+            android:id="@+id/tvOrderItemAdditionalValue"
+            style="@style/LightMediumText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvOrderItemSubtotalValue"
+            tools:text="$ 37" />
+
+        <TextView
+            style="@style/ThinSmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_with_colon"
+            app:layout_constraintBottom_toBottomOf="@+id/tvOrderItemTotalValue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvOrderItemTotalValue" />
+
+        <TextView
+            android:id="@+id/tvOrderItemTotalValue"
+            style="@style/LightMediumText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvOrderItemAdditionalValue"
+            tools:text="$ 37" />
+
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

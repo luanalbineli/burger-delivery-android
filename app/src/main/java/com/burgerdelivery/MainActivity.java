@@ -12,12 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.burgerdelivery.burgerlist.BurgerListFragment;
+import com.burgerdelivery.orderhistoriclist.OrderHistoricListActivity;
 import com.burgerdelivery.orderitemlist.OrderItemListActivity;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
     @BindView(R.id.toolbar)
@@ -53,6 +52,10 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_cart) {
             Intent intent = OrderItemListActivity.getIntent(this);
+            startActivity(intent);
+            return true;
+        } else  if (item.getItemId() == R.id.menu_order_historic) {
+            Intent intent = OrderHistoricListActivity.getIntent(this);
             startActivity(intent);
             return true;
         }

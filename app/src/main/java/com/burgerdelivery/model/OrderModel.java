@@ -22,7 +22,6 @@ public class OrderModel {
     private Date date;
     private int status;
     private int id;
-
     private int serverId;
 
     public OrderModel(@OrderStatus int status, Date date) {
@@ -136,5 +135,13 @@ public class OrderModel {
 
     public void setOrderItemList(List<OrderItemModel> orderItemList) {
         this.itemList = orderItemList;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public int getServerId() {
+        return serverId;
     }
 }

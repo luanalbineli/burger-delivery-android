@@ -1,4 +1,4 @@
-package com.burgerdelivery.orderlist;
+package com.burgerdelivery.orderhistoriclist;
 
 import android.app.LoaderManager;
 import android.content.Context;
@@ -29,9 +29,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class OrderListActivity extends BaseActivity<OrderListContract.View> implements OrderListContract.View {
+public class OrderHistoricListActivity extends BaseActivity<OrderHistoricListContract.View> implements OrderHistoricListContract.View {
     @Inject
-    OrderListPresenter mPresenter;
+    OrderHistoricListPresenter mPresenter;
 
     @Inject
     BurgerRepository mBurgerRepository;
@@ -39,7 +39,7 @@ public class OrderListActivity extends BaseActivity<OrderListContract.View> impl
     @BindView(R.id.rvList)
     RecyclerView mHistoricOrderList;
 
-    private OrderListAdapter mAdapter;
+    private OrderHistoricListAdapter mAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class OrderListActivity extends BaseActivity<OrderListContract.View> impl
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mHistoricOrderList.setLayoutManager(linearLayoutManager);
 
-        mAdapter = new OrderListAdapter(R.string.the_historic_order_list_is_empty, () -> mPresenter.tryToFetchHistoricOrderListAgain());
+        mAdapter = new OrderHistoricListAdapter(R.string.the_historic_order_list_is_empty, () -> mPresenter.tryToFetchHistoricOrderListAgain());
 
         mHistoricOrderList.setAdapter(mAdapter);
     }
@@ -101,7 +101,7 @@ public class OrderListActivity extends BaseActivity<OrderListContract.View> impl
             @Override
             public Loader<List<OrderModel>> onCreateLoader(int id, Bundle args) {
                 Timber.d("onCreateLoader - Creating the loader, id: " + id);
-                return new HistoricOrderListLoader(OrderListActivity.this, mBurgerRepository);
+                return new HistoricOrderListLoader(OrderHistoricListActivity.this, mBurgerRepository);
             }
 
             @Override
@@ -151,17 +151,17 @@ public class OrderListActivity extends BaseActivity<OrderListContract.View> impl
     }
 
     @Override
-    protected BasePresenter<OrderListContract.View> presenterImplementation() {
+    protected BasePresenter<OrderHistoricListContract.View> presenterImplementation() {
         return mPresenter;
     }
 
     @Override
-    protected OrderListContract.View viewImplementation() {
+    protected OrderHistoricListContract.View viewImplementation() {
         return this;
     }
 
     public static Intent getIntent(Context context) {
-        return new Intent(context, OrderListActivity.class);
+        return new Intent(context, OrderHistoricListActivity.class);
     }
 
     private static final int TASK_ID = 108;

@@ -1,4 +1,4 @@
-package com.burgerdelivery.orderlist;
+package com.burgerdelivery.orderhistoriclist;
 
 import android.view.View;
 
@@ -7,9 +7,9 @@ import com.burgerdelivery.ui.recyclerview.CustomRecyclerViewHolder;
 
 import butterknife.ButterKnife;
 
-class OrderListVH extends CustomRecyclerViewHolder {
+class OrderHistoricListVH extends CustomRecyclerViewHolder {
 
-    OrderListVH(View itemView) {
+    OrderHistoricListVH(View itemView) {
         super(itemView);
 
         ButterKnife.bind(this, itemView);

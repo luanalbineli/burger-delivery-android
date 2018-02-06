@@ -41,15 +41,15 @@ dependencies {
     def libs = [supportV7] + constraintLayout + recyclerView + design +
             gson + retrofit + timber + supportAnnotations + fresco +
             fancyButton + rxJava + cardView + materialDialog +
-            /*firebaseCore +*/firebaseMessaging + stetho
+            firebaseCrash + firebaseMessaging + stetho
+
     implementation libs
+
     implementation dagger
     annotationProcessor daggerCompiler
+
     implementation butterKnife
     annotationProcessor butterKnifeCompiler
-    /*compile(crashlytics) {
-                transitive = true
-            }*/
 }
 
 apply plugin: 'com.google.gms.google-services'

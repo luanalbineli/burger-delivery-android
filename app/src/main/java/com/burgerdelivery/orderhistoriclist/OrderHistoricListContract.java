@@ -1,4 +1,4 @@
-package com.burgerdelivery.orderlist;
+package com.burgerdelivery.orderhistoriclist;
 
 import com.burgerdelivery.base.BasePresenter;
 import com.burgerdelivery.model.OrderModel;
@@ -6,7 +6,7 @@ import com.burgerdelivery.model.viewmodel.HistoricOrderListViewModel;
 
 import java.util.List;
 
-interface OrderListContract {
+interface OrderHistoricListContract {
     interface View {
         void closeScreen();
 

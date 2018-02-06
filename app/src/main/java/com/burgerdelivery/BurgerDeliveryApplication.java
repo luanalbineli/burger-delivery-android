@@ -6,6 +6,7 @@ import android.content.Context;
 import com.burgerdelivery.dagger.component.ApplicationComponent;
 import com.burgerdelivery.dagger.component.DaggerApplicationComponent;
 import com.burgerdelivery.dagger.modules.ApplicationModule;
+import com.burgerdelivery.util.ReleaseTree;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.listener.RequestListener;
@@ -24,7 +25,11 @@ public class BurgerDeliveryApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Timber.plant(new Timber.DebugTree());
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        } else {
+            Timber.plant(new ReleaseTree());
+        }
 
         Stetho.initializeWithDefaults(this);
 

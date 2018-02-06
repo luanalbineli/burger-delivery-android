@@ -33,7 +33,7 @@
         </activity>
 
         <activity
-            android:name=".orderlist.OrderListActivity"
+            android:name=".orderhistoriclist.OrderHistoricListActivity"
             android:label="@string/order_list"
             android:parentActivityName=".MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -84,10 +84,6 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="fda062f6a58cc38f8a92726ebd57b3b025584c72"
-            />
     </application>
 
 </manifest>
