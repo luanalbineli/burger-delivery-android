@@ -3,7 +3,6 @@ package com.burgerdelivery.repository.loader;
 import android.content.Context;
 import android.util.Pair;
 
-import com.burgerdelivery.R;
 import com.burgerdelivery.enunn.OrderStatus;
 import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.model.response.OrderStatusUpdateModel;
@@ -11,11 +10,8 @@ import com.burgerdelivery.repository.BurgerRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.Single;
-import io.reactivex.SingleSource;
-import io.reactivex.functions.Function;
 import timber.log.Timber;
 
 public class HistoricOrderListLoader extends AsyncTaskLoaderExecutor<List<OrderModel>> {
@@ -35,22 +31,34 @@ public class HistoricOrderListLoader extends AsyncTaskLoaderExecutor<List<OrderM
                     .map(orderList -> {
                         List<Integer> nonPendingUndeliveredOrderList = new ArrayList<>();
                         for (OrderModel orderModel : orderList) {
-                            if (orderModel.getStatus() != OrderStatus.DELIVERED && orderModel.getStatus() != OrderStatus.DELIVERED) {
+                            if (orderModel.getStatus() != OrderStatus.PENDING && orderModel.getStatus() != OrderStatus.DELIVERED) {
                                 nonPendingUndeliveredOrderList.add(orderModel.getServerId());
                             }
                         }
                         return new Pair<>(orderList, nonPendingUndeliveredOrderList);
                     }).flatMap(listListPair -> {
+                        Timber.d("Checking if there is some orders to update the status");
                         if (listListPair.second.size() == 0) {
                             return Single.just(listListPair.first);
                         }
-
+                        Timber.d("Yes, there is");
                         return mBurgerRepository.updateOrderListStatus(listListPair.second)
-                                .map(orderStatusUpdateList -> {
+                                .flatMap(orderStatusUpdateList -> {
+                                    List<Single<Integer>> singleList = new ArrayList<>();
                                     for (OrderStatusUpdateModel orderStatusUpdateModel: orderStatusUpdateList) {
-                                        mBurgerRepository.updateOrderStatusByServerId(orderStatusUpdateModel.getId(), orderStatusUpdateModel.getStatus());
+                                        singleList.add(mBurgerRepository.updateOrderStatusByServerId(orderStatusUpdateModel.getId(), orderStatusUpdateModel.getStatus()).toSingleDefault(1));
                                     }
-                                    return listListPair.first;
+
+                                    return Single.zip(singleList, objects -> {
+                                        for (OrderStatusUpdateModel orderStatusUpdateModel: orderStatusUpdateList) {
+                                            for (OrderModel orderModel : listListPair.first) {
+                                                if (orderModel.getServerId() == orderStatusUpdateModel.getId()) {
+                                                    orderModel.setStatus(orderStatusUpdateModel.getStatus());
+                                                }
+                                            }
+                                        }
+                                        return listListPair.first;
+                                    });
                                 });
                     }).blockingGet();
         } catch (Exception e) {

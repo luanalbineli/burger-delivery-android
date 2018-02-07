@@ -42,9 +42,6 @@
     <string name="item_was_not_removed_error_message">The item was not removed. Please, try again</string>
     <string name="error_creating_order">An error occurred while tried to create the order. Please, try again.</string>
 
-    <!-- FCM notification channel -->
-    <string name="default_notification_channel_id" translatable="false">fcm_order_status_update_channel</string>
-    <string name="default_notification_channel_name" translatable="true">Order updates</string>
     <string name="pending">Pending</string>
     <string name="preparing">Preparing</string>
     <string name="sent">Sent</string>
@@ -54,4 +51,16 @@
     <string name="historic_order">Order historic</string>
     <string name="order_list">Historic order list</string>
     <string name="the_historic_order_list_is_empty">The historic order list is empty</string>
+
+    <string name="burger">Burger</string>
+
+    <string name="order_with_colon">Order:</string>
+    <string name="burger_total_with_colon">Burger total:</string>
+    <string name="additional_total_with_colon">Additional total:</string>
+
+    <string name="order_historic_status_format">The current status of your order is: %1$s</string>
+
+    <!-- FCM notification channel -->
+    <string name="default_notification_channel_id" translatable="false">fcm_order_status_update_channel</string>
+    <string name="default_notification_channel_name" translatable="true">Order updates</string>
 </resources>

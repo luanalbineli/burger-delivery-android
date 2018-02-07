@@ -37,8 +37,8 @@ abstract class BurgerDeliveryWidgetManager {
             intentAdapter.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetIds);
             views.setRemoteAdapter(R.id.lvWidgetItemList, intentAdapter);
             Timber.d("Bundled the item list. Number of items: " + orderModel.getItemList().size());
-
-            appWidgetManager.updateAppWidget(widgetIds, views);
         }
+
+        appWidgetManager.updateAppWidget(widgetIds, views);
     }
 }

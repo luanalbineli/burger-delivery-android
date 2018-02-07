@@ -20,6 +20,7 @@ import com.burgerdelivery.model.OrderModel;
 import com.burgerdelivery.model.viewmodel.HistoricOrderListViewModel;
 import com.burgerdelivery.repository.BurgerRepository;
 import com.burgerdelivery.repository.loader.HistoricOrderListLoader;
+import com.burgerdelivery.widget.OrderShortcutWidgetProvider;
 
 import java.util.List;
 
@@ -140,6 +141,11 @@ public class OrderHistoricListActivity extends BaseActivity<OrderHistoricListCon
     @Override
     public void showHistoricOrderListEmptyMessage() {
         mAdapter.showEmptyMessage();
+    }
+
+    @Override
+    public void updateWidgets() {
+        OrderShortcutWidgetProvider.sendBroadcastToUpdateTheWidgets(this);
     }
 
     @Override

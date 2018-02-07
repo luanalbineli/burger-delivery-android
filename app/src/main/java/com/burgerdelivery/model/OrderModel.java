@@ -144,4 +144,30 @@ public class OrderModel {
     public int getServerId() {
         return serverId;
     }
+
+    public float getBurgerTotal() {
+        float totalValue = 0;
+        if (itemList != null) {
+            for (OrderItemModel orderItemModel: itemList) {
+                totalValue += orderItemModel.getSubtotalValue();
+            }
+        }
+
+        return totalValue;
+    }
+
+    public float getAdditionalTotal() {
+        float totalValue = 0;
+        if (itemList != null) {
+            for (OrderItemModel orderItemModel: itemList) {
+                totalValue += orderItemModel.getAdditionalValue();
+            }
+        }
+
+        return totalValue;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }

@@ -24,7 +24,7 @@ public class OrderHistoricListPresenter implements OrderHistoricListContract.Pre
 
     @Override
     public void onHistoricOrderListFetched(List<OrderModel> orderList) {
-        mHistoricOrderListViewModel.orderList = orderList;
+        mHistoricOrderListViewModel.orderHistoricList = orderList;
         if (orderList.size() == 0) {
             mView.showHistoricOrderListEmptyMessage();
         } else {
@@ -38,11 +38,12 @@ public class OrderHistoricListPresenter implements OrderHistoricListContract.Pre
     public void start(HistoricOrderListViewModel historicOrderListViewModel) {
         mHistoricOrderListViewModel = historicOrderListViewModel;
         Timber.d("Starting the fragment's presenter");
-        if (historicOrderListViewModel.orderList == null) {
+        if (historicOrderListViewModel.orderHistoricList == null) {
             mView.showLoadingIndicator();
             mView.fetchHistoricOrderItemListUsingLoader();
         } else {
-            mView.showOrderItemList(historicOrderListViewModel.orderList);
+            mView.showOrderItemList(historicOrderListViewModel.orderHistoricList);
+            mView.updateWidgets();
         }
     }
 

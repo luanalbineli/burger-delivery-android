@@ -23,6 +23,8 @@ interface OrderHistoricListContract {
         void hideLoadingIndicator();
 
         void showHistoricOrderListEmptyMessage();
+
+        void updateWidgets();
     }
 
     interface Presenter extends BasePresenter<View> {
