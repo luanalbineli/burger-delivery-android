@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1002654116158",
+    "firebase_url": "https://burgerdelivery-f72fd.firebaseio.com",
+    "project_id": "burgerdelivery-f72fd",
+    "storage_bucket": "burgerdelivery-f72fd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002654116158:android:4d95cfa143f87ab5",
+        "android_client_info": {
+          "package_name": "com.burgerdelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002654116158-mrm44iihn6c9qjbkd8aajcnn13j39cto.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC063nrKIroFfhSbJg5BHbN1QcAu9YfCOE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
